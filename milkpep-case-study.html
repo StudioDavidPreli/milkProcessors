@@ -606,7 +606,7 @@ a:hover { text-decoration: underline; }
           <div class="tools">
             <span class="tool-pill green">After Effects Expressions</span>
           </div>
-          <p>Milk variety — whole, strawberry, chocolate, and so on — determines which precomposition is visible in the final render. This is controlled by three text layers in the export composition. Each text layer holds a keyword value. Expressions on the precomposition layers read these keyword values and evaluate them against a lookup to set layer opacity. The text layer content is the variable. The expression is the conditional logic. NexRender writes to the text layers; After Effects evaluates the result at render time.</p>
+          <p>Milk variety — WHOLE, STRAWBERRY, CHOCOLATE, and so on — determines which precomposition is visible in the final render. This is controlled by three text layers in the export composition. Each text layer holds a keyword value. Expressions on the precomposition layers read these keyword values and evaluate them against a lookup to set layer opacity. The text layer content is the variable. The expression is the conditional logic. NexRender writes to the text layers; After Effects evaluates the result at render time.</p>
           <p>Recipes that do not use chocolate milk do not include the chocolate precomposition at all. Each recipe has a specific composition set corresponding to the vessel variants available for that product. The schema specifies which compositions are present and what keyword values each one responds to.</p>
 
           <div class="gif-grid">
@@ -672,17 +672,17 @@ a:hover { text-decoration: underline; }
         </tr>
         <tr>
           <td>vessel_type</td>
-          <td>jug / carton / bottle&hellip;</td>
+          <td>JUG / CARTON / BOTTLE&hellip;</td>
           <td>Determines which vessel precomp set is active; maps to composition name in schema</td>
         </tr>
         <tr>
           <td>cap_color</td>
-          <td>red / blue / white / green&hellip;</td>
+          <td>RED / BLUE / WHITE / GREEN&hellip;</td>
           <td>Drives cap layer visibility within active vessel precomp</td>
         </tr>
         <tr>
           <td>carton_size</td>
-          <td>half-pint / pint / quart / half-gallon&hellip;</td>
+          <td>HALF-PINT / PINT / QUART / HALF-GALLON&hellip;</td>
           <td>Scales vessel and label placement via parented null; size-specific compositions for non-standard formats</td>
         </tr>
       </tbody>
@@ -822,8 +822,8 @@ a:hover { text-decoration: underline; }
       </div>
       <div class="combo-cell">
         <div class="combo-cell-label">Output formats</div>
-        <div class="combo-cell-count">2</div>
-        <div class="combo-cell-desc">Video (MP4) and still image — both generated from the same template</div>
+        <div class="combo-cell-count">1&ndash;3</div>
+        <div class="combo-cell-desc">9:16 video (all recipes) + 4:5 and/or 1:1 (select recipes) — format availability is defined per template</div>
       </div>
     </div>
 
