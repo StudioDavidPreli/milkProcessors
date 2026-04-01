@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MilkPEP Dynamic Videos — Technical Specification</title>
+<title>MilkPEP x NexRender — Technical Specification</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -328,7 +328,7 @@ code {
   <!-- ── HEADER ── -->
   <header class="cs-header">
     <div class="cs-eyebrow">Technical Specification &mdash; Studio David Preli &mdash; 2026</div>
-    <h1 class="cs-title">MilkPEP Dynamic Videos</h1>
+    <h1 class="cs-title">MilkPEP x NexRender</h1>
     <p class="cs-subtitle">After Effects template architecture, NexRender integration, data schema, and depth compositing pipeline</p>
     <div class="cs-meta">
       <div class="cs-meta-item">
@@ -404,10 +404,10 @@ code {
 <span class="cm">// Simplified data flow — all values are schema-defined keyword strings</span>
 
 <span class="ck">User form</span>
-  vessel_type  = <span class="cs">"jug"</span>
-  milk_variety = <span class="cs">"chocolate"</span>
-  cap_color    = <span class="cs">"brown"</span>
-  carton_size  = <span class="cs">"half-gallon"</span>
+  vessel_type  = <span class="cs">"JUG"</span>
+  milk_variety = <span class="cs">"CHOCOLATE"</span>
+  cap_color    = <span class="cs">"BROWN"</span>
+  carton_size  = <span class="cs">"HALF-GALLON"</span>
   label_asset  = <span class="cs">"[user uploaded PNG]"</span>
 
         ↓  Django API validates &amp; constructs manifest
@@ -416,16 +416,16 @@ code {
   composition  = <span class="cs">"MILK_EXPORT"</span>        <span class="cm">// reserved comp name</span>
   assets       = [ label_asset → <span class="cs">"MILK_LABEL"</span> layer ]
   actions      = [
-    setText( <span class="cs">"VARIETY_VAR"</span>,  <span class="cs">"chocolate"</span>  ),
-    setText( <span class="cs">"VESSEL_VAR"</span>,   <span class="cs">"jug"</span>        ),
-    setText( <span class="cs">"CAP_VAR"</span>,      <span class="cs">"brown"</span>      ),
-    setText( <span class="cs">"SIZE_VAR"</span>,     <span class="cs">"half-gallon"</span>),
+    setText( <span class="cs">"VARIETY_VAR"</span>,  <span class="cs">"CHOCOLATE"</span>  ),
+    setText( <span class="cs">"VESSEL_VAR"</span>,   <span class="cs">"JUG"</span>        ),
+    setText( <span class="cs">"CAP_VAR"</span>,      <span class="cs">"BROWN"</span>      ),
+    setText( <span class="cs">"SIZE_VAR"</span>,     <span class="cs">"HALF-GALLON"</span>),
   ]
 
         ↓  NexRender writes values, triggers AE render
 
 <span class="ck">After Effects</span>
-  VARIETY_VAR text layer = <span class="cs">"chocolate"</span>
+  VARIETY_VAR text layer = <span class="cs">"CHOCOLATE"</span>
   → expression on chocolate precomp reads layer source text
   → opacity set to <span class="cv">100</span>; all other variety precomps → <span class="cv">0</span>
   MILK_LABEL layer replaced with user PNG, parented to vessel null
@@ -481,7 +481,7 @@ code {
 
     <h3>2.3 — Variable text layers</h3>
 
-    <p>Four text layers in <code>MILK_EXPORT</code> hold the variable values. Their names are reserved. NexRender's <code>setText</code> action targets them by name and writes the schema keyword value before rendering begins.</p>
+    <p>Four text layers in <code>MILK_EXPORT</code> hold the variable values. Their names are reserved. NexRender's <code>setText</code> action targets them by name and writes the uppercase schema keyword value before rendering begins.</p>
 
     <table class="data-table">
       <thead>
@@ -517,14 +517,14 @@ code {
 
     <div class="code-block">
 <span class="cm">// Opacity expression — applied to each variety precomp layer
-// Replace "chocolate" with the keyword for this precomp
+// Replace "CHOCOLATE" with the keyword for this precomp
 // Replace "VARIETY_VAR" with the controlling text layer name</span>
 
 <span class="ck">var</span> ctrl = thisComp.layer(<span class="cs">"VARIETY_VAR"</span>).sourceText.value;
-ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <span class="cv">0</span>;
+ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <span class="cv">0</span>;
     </div>
 
-    <p>This pattern is intentionally minimal. The text layer contains the raw keyword string with no whitespace, no casing variation, and no formatting. Any deviation — a trailing space, a capitalisation difference — causes the expression to evaluate to <code>0</code> and the precomp to be invisible in the render.</p>
+    <p>This pattern is intentionally minimal. The text layer contains the raw uppercase keyword string with no whitespace and no formatting. Any deviation — a trailing space, a capitalisation difference — causes the expression to evaluate to <code>0</code> and the precomp to be invisible in the render.</p>
 
     <h3>2.5 — Asset naming constraints</h3>
 
@@ -561,25 +561,25 @@ ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <sp
         <tr>
           <td>Milk variety</td>
           <td><code>VARIETY_VAR</code></td>
-          <td><code>whole</code> / <code>strawberry</code> / <code>chocolate</code> / <code>skim</code> / <code>2percent</code> / <code>lactose-free</code></td>
+          <td><code>WHOLE</code> / <code>STRAWBERRY</code> / <code>CHOCOLATE</code> / <code>SKIM</code> / <code>2PERCENT</code> / <code>LACTOSE-FREE</code></td>
           <td>Per-recipe availability. Recipes not containing chocolate milk do not include the chocolate precomp set.</td>
         </tr>
         <tr>
           <td>Vessel type</td>
           <td><code>VESSEL_VAR</code></td>
-          <td><code>jug</code> / <code>carton</code> / <code>bottle</code></td>
+          <td><code>JUG</code> / <code>CARTON</code> / <code>BOTTLE</code></td>
           <td>Determines active vessel precomp hierarchy. Each vessel type has its own depth-scanned label placement null.</td>
         </tr>
         <tr>
           <td>Cap colour</td>
           <td><code>CAP_VAR</code></td>
-          <td><code>red</code> / <code>blue</code> / <code>white</code> / <code>green</code> / <code>yellow</code> / <code>orange</code> / <code>purple</code> / <code>black</code> / <code>brown</code> / <code>pink</code></td>
+          <td><code>RED</code> / <code>BLUE</code> / <code>WHITE</code> / <code>GREEN</code> / <code>YELLOW</code> / <code>ORANGE</code> / <code>PURPLE</code> / <code>BLACK</code> / <code>BROWN</code> / <code>PINK</code></td>
           <td>Cap layer visibility is controlled by expression within the active vessel precomp. Not all cap colours are available for all vessel types.</td>
         </tr>
         <tr>
           <td>Carton size</td>
           <td><code>SIZE_VAR</code></td>
-          <td><code>half-pint</code> / <code>pint</code> / <code>quart</code> / <code>half-gallon</code></td>
+          <td><code>HALF-PINT</code> / <code>PINT</code> / <code>QUART</code> / <code>HALF-GALLON</code></td>
           <td>Drives scale expression on vessel null. Non-standard sizes use a size-specific precomp with adjusted depth map.</td>
         </tr>
         <tr>
@@ -594,9 +594,9 @@ ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <sp
     <h3>Keyword string rules</h3>
 
     <ul class="cs-list">
-      <li>All keywords are lowercase. No exceptions.</li>
-      <li>Multi-word values use hyphens only — no spaces, no underscores</li>
-      <li>The keyword string must match the After Effects expression comparison character-for-character, including hyphenation</li>
+      <li>All keywords are uppercase (CAPS LOCK). This matches the naming convention of the layer names and composition names they interact with.</li>
+      <li>Multi-word values use hyphens only — no spaces, no underscores. Hyphens are retained in uppercase: <code>HALF-GALLON</code>, <code>LACTOSE-FREE</code></li>
+      <li>The keyword string must match the After Effects expression comparison character-for-character, including hyphenation and case</li>
       <li>New keyword values cannot be added without a corresponding precomp layer and expression branch in all affected templates</li>
     </ul>
 
@@ -631,25 +631,25 @@ ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <sp
         <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-prerender-set-text"</span>,
         <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>,
         <span class="cs">"layerName"</span>: <span class="cs">"VARIETY_VAR"</span>,
-        <span class="cs">"text"</span>: <span class="cs">"chocolate"</span>
+        <span class="cs">"text"</span>: <span class="cs">"CHOCOLATE"</span>
       },
       {
         <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-prerender-set-text"</span>,
         <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>,
         <span class="cs">"layerName"</span>: <span class="cs">"VESSEL_VAR"</span>,
-        <span class="cs">"text"</span>: <span class="cs">"jug"</span>
+        <span class="cs">"text"</span>: <span class="cs">"JUG"</span>
       },
       {
         <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-prerender-set-text"</span>,
         <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>,
         <span class="cs">"layerName"</span>: <span class="cs">"CAP_VAR"</span>,
-        <span class="cs">"text"</span>: <span class="cs">"brown"</span>
+        <span class="cs">"text"</span>: <span class="cs">"BROWN"</span>
       },
       {
         <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-prerender-set-text"</span>,
         <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>,
         <span class="cs">"layerName"</span>: <span class="cs">"SIZE_VAR"</span>,
-        <span class="cs">"text"</span>: <span class="cs">"half-gallon"</span>
+        <span class="cs">"text"</span>: <span class="cs">"HALF-GALLON"</span>
       }
     ],
     <span class="cs">"postrender"</span>: [
@@ -684,7 +684,7 @@ ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <sp
         </tr>
         <tr>
           <td>Asset resolution</td>
-          <td>All templates render at 1080&times;1350 (4:5) for social deployment. A 1:1 square crop is generated as a secondary output for some recipes.</td>
+          <td>All templates include a 9:16 (1080&times;1920) output. Some recipes additionally offer a 4:5 (1080&times;1350) output. Some recipes additionally offer a 1:1 square output. The available formats per recipe are defined at the template level.</td>
         </tr>
       </tbody>
     </table>
@@ -756,7 +756,7 @@ ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <sp
     <div class="sec-label"><span class="sec-num">06</span>Combinatorics</div>
     <h2>Where 12,460 comes from.</h2>
 
-    <p>The 12,460 figure is the total number of distinct renders the system can produce across all recipes, vessel configurations, milk varieties, cap colours, and output formats. It is not a count of renders produced — it is the scope of the system. Each combination is a valid, distinct After Effects render with a unique precomp configuration, label placement, and expression state.</p>
+    <p>The 12,460 figure is the total number of distinct renders the system can produce across all recipes, vessel configurations, milk varieties, cap colours, and output formats. It is not a count of renders produced — it is the scope of the system. Each combination is a valid, distinct After Effects render with a unique precomp configuration, label placement, and expression state. All recipes produce a 9:16 output; some also produce 4:5 and 1:1 outputs.</p>
 
     <div class="callout-info">
       <p>Not all combinations are available for all recipes. A recipe that does not use chocolate milk does not expose the chocolate variety option. The totals below reflect the maximum available per-variable count; actual per-recipe combination counts are lower and vary by recipe.</p>
@@ -799,7 +799,7 @@ ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <sp
         <tr>
           <td>Output formats</td>
           <td>2</td>
-          <td>4:5 video (1080&times;1350) and 1:1 still image</td>
+          <td>9:16 (all recipes) + 4:5 (select recipes) + 1:1 (select recipes) &mdash; format availability is per-recipe, not universal</td>
         </tr>
         <tr class="total-row">
           <td>Total combinations</td>
@@ -829,9 +829,9 @@ ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <sp
       <tbody>
         <tr>
           <td>Wrong precomp visible</td>
-          <td>Keyword casing mismatch between API value and AE expression comparison string</td>
+          <td>API passes a lowercase value where the expression expects uppercase, or vice versa — e.g. <code>chocolate</code> instead of <code>CHOCOLATE</code></td>
           <td>Render completes. Output shows default (first) precomp regardless of user selection.</td>
-          <td>Schema enforcement at API validation layer. All keywords lowercase before manifest construction.</td>
+          <td>Schema enforcement at API validation layer. All keyword values uppercased before manifest construction.</td>
         </tr>
         <tr>
           <td>Label not replaced</td>
