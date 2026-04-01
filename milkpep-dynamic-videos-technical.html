@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MilkPEP Dynamic Videos — Technical Specification</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #141414;
+  --panel:   #1e1e1e;
+  --panel2:  #262626;
+  --border:  #2e2e2e;
+  --border2: #3d3d3d;
+  --accent:  #fffef1;
+  --accent2: #b9b0ff;
+  --accent3: #e8b86d;
+  --text:    #e1e1e1;
+  --muted:   #888888;
+  --muted2:  #aaaaaa;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.page { max-width: 860px; margin: 0 auto; padding: 56px 28px 80px; }
+
+/* ── Header ── */
+.cs-header {
+  margin-bottom: 56px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 32px;
+}
+
+.cs-eyebrow {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.cs-title {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(28px, 5vw, 48px);
+  color: var(--accent);
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.cs-subtitle {
+  font-size: 13px;
+  color: var(--muted2);
+  margin-bottom: 24px;
+}
+
+.cs-meta { display: flex; gap: 28px; flex-wrap: wrap; }
+.cs-meta-item { display: flex; flex-direction: column; gap: 3px; }
+.cs-meta-label { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.cs-meta-value { font-size: 12px; color: var(--text); }
+
+/* ── TOC ── */
+.toc {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 20px 24px;
+  margin-bottom: 56px;
+}
+
+.toc-label {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.toc-list li { display: flex; align-items: baseline; gap: 10px; }
+.toc-list a { font-size: 12px; color: var(--muted2); text-decoration: none; transition: color 0.15s; }
+.toc-list a:hover { color: var(--accent); }
+.toc-num { font-size: 9px; color: var(--muted); min-width: 20px; }
+
+/* ── Section label ── */
+.sec-label {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.sec-num {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--accent);
+  margin-right: 4px;
+}
+
+h2 {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  margin-top: 32px;
+}
+
+h4 {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 8px;
+  margin-top: 20px;
+}
+
+p { margin-bottom: 16px; color: var(--text); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.section { margin-bottom: 64px; }
+
+/* ── Data table ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 24px;
+  font-size: 11px;
+}
+
+.data-table th {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+  background: var(--panel);
+}
+
+.data-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(46,46,46,0.6);
+  color: var(--muted2);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.data-table td:first-child { color: var(--accent); white-space: nowrap; }
+.data-table td code { color: var(--accent3); background: var(--panel2); padding: 1px 5px; border-radius: 2px; font-size: 10px; }
+.data-table tr:last-child td { border-bottom: none; }
+
+/* ── Code block ── */
+.code-block {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 2px solid rgba(255,254,241,0.25);
+  border-radius: 2px;
+  padding: 16px 20px;
+  margin: 16px 0 24px;
+  overflow-x: auto;
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--muted2);
+}
+
+.code-block .cm  { color: var(--muted); }     /* comment */
+.code-block .ck  { color: var(--accent); }    /* keyword / layer name */
+.code-block .cv  { color: var(--accent3); }   /* value */
+.code-block .cs  { color: var(--accent2); }   /* string */
+
+/* ── Inline code ── */
+code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--accent3);
+  background: var(--panel2);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+/* ── Warning / note callout ── */
+.callout {
+  border-left: 2px solid var(--accent3);
+  background: rgba(232,184,109,0.04);
+  padding: 14px 20px;
+  margin: 20px 0;
+  border-radius: 0 2px 2px 0;
+}
+.callout-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent3);
+  margin-bottom: 6px;
+}
+.callout p { font-size: 12px; color: var(--muted2); margin: 0; }
+
+/* ── Info callout ── */
+.callout-info {
+  border-left: 2px solid rgba(255,254,241,0.3);
+  background: rgba(255,254,241,0.03);
+  padding: 14px 20px;
+  margin: 20px 0;
+  border-radius: 0 2px 2px 0;
+}
+.callout-info p { font-size: 12px; color: var(--muted2); margin: 0; }
+
+/* ── List ── */
+.cs-list {
+  list-style: none;
+  margin: 12px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cs-list li {
+  font-size: 12px;
+  color: var(--muted2);
+  padding-left: 16px;
+  position: relative;
+}
+
+.cs-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+
+/* ── Combinatorics breakdown ── */
+.combo-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 11px;
+}
+
+.combo-table th {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+  background: var(--panel);
+}
+
+.combo-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(46,46,46,0.5);
+  color: var(--muted2);
+}
+
+.combo-table td:first-child { color: var(--text); }
+.combo-table td:nth-child(2) {
+  color: var(--accent);
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 15px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.combo-table .total-row td {
+  border-top: 1px solid var(--border);
+  border-bottom: none;
+  color: var(--accent);
+  font-weight: 700;
+}
+.combo-table .total-row td:nth-child(2) {
+  font-size: 20px;
+}
+
+/* ── Failure mode table ── */
+.failure-table { font-size: 11px; }
+.failure-table td:first-child { color: var(--accent3); }
+
+/* ── Footer ── */
+.cs-footer {
+  margin-top: 72px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cs-footer p { font-size: 10px; color: var(--muted); margin: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <header class="cs-header">
+    <div class="cs-eyebrow">Technical Specification &mdash; Studio David Preli &mdash; 2023</div>
+    <h1 class="cs-title">MilkPEP Dynamic Videos</h1>
+    <p class="cs-subtitle">After Effects template architecture, NexRender integration, data schema, and depth compositing pipeline</p>
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Pipeline</span>
+        <span class="cs-meta-value">After Effects &rarr; NexRender &rarr; Django</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Templates</span>
+        <span class="cs-meta-value">28+ AE project files</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Output scope</span>
+        <span class="cs-meta-value">12,460 combinations</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Year</span>
+        <span class="cs-meta-value">2023</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── TOC ── -->
+  <nav class="toc">
+    <div class="toc-label">Contents</div>
+    <ul class="toc-list">
+      <li><span class="toc-num">01</span><a href="#overview">System overview</a></li>
+      <li><span class="toc-num">02</span><a href="#template">After Effects template architecture</a></li>
+      <li><span class="toc-num">03</span><a href="#schema">Data schema</a></li>
+      <li><span class="toc-num">04</span><a href="#nexrender">NexRender integration</a></li>
+      <li><span class="toc-num">05</span><a href="#depth">Depth compositing pipeline</a></li>
+      <li><span class="toc-num">06</span><a href="#combinatorics">Combinatorics</a></li>
+      <li><span class="toc-num">07</span><a href="#failures">Known failure modes</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── 01 OVERVIEW ── -->
+  <section class="section" id="overview">
+    <div class="sec-label"><span class="sec-num">01</span>System overview</div>
+    <h2>Three layers. One contract.</h2>
+
+    <p>The system is composed of three distinct layers that communicate exclusively through a shared data schema. The web front end collects user input. NexRender carries that input into After Effects. After Effects evaluates it at render time. No layer has any direct knowledge of the others — they share only a vocabulary of keyword strings.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Layer</th><th>Technology</th><th>Responsibility</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Front end</td>
+          <td>Next.js / React</td>
+          <td>Presents user-facing variable selection. Validates input against schema. Submits job request to Django API.</td>
+        </tr>
+        <tr>
+          <td>API &amp; render queue</td>
+          <td>Django / NexRender</td>
+          <td>Receives job request. Constructs NexRender job manifest. Queues and executes render. Returns download link on completion.</td>
+        </tr>
+        <tr>
+          <td>Render target</td>
+          <td>After Effects (2025)</td>
+          <td>Receives variable values via text layer injection. Evaluates expressions to configure precomp visibility. Composites user label into footage. Renders output file.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout-info">
+      <p>The templates were built for After Effects 2025 and are not backwards-compatible with earlier versions. The expression engine behaviour and certain effect parameters differ across versions in ways that affect the depth compositing stack.</p>
+    </div>
+
+    <h3>Data flow</h3>
+
+    <div class="code-block">
+<span class="cm">// Simplified data flow — all values are schema-defined keyword strings</span>
+
+<span class="ck">User form</span>
+  vessel_type  = <span class="cs">"jug"</span>
+  milk_variety = <span class="cs">"chocolate"</span>
+  cap_color    = <span class="cs">"brown"</span>
+  carton_size  = <span class="cs">"half-gallon"</span>
+  label_asset  = <span class="cs">"[user uploaded PNG]"</span>
+
+        ↓  Django API validates &amp; constructs manifest
+
+<span class="ck">NexRender job manifest</span>
+  composition  = <span class="cs">"MILK_EXPORT"</span>        <span class="cm">// reserved comp name</span>
+  assets       = [ label_asset → <span class="cs">"MILK_LABEL"</span> layer ]
+  actions      = [
+    setText( <span class="cs">"VARIETY_VAR"</span>,  <span class="cs">"chocolate"</span>  ),
+    setText( <span class="cs">"VESSEL_VAR"</span>,   <span class="cs">"jug"</span>        ),
+    setText( <span class="cs">"CAP_VAR"</span>,      <span class="cs">"brown"</span>      ),
+    setText( <span class="cs">"SIZE_VAR"</span>,     <span class="cs">"half-gallon"</span>),
+  ]
+
+        ↓  NexRender writes values, triggers AE render
+
+<span class="ck">After Effects</span>
+  VARIETY_VAR text layer = <span class="cs">"chocolate"</span>
+  → expression on chocolate precomp reads layer source text
+  → opacity set to <span class="cv">100</span>; all other variety precomps → <span class="cv">0</span>
+  MILK_LABEL layer replaced with user PNG, parented to vessel null
+  → depth displacement applied via Displacer Pro
+  → label rendered in-scene with correct perspective
+    </div>
+
+  </section>
+
+  <!-- ── 02 TEMPLATE ARCHITECTURE ── -->
+  <section class="section" id="template">
+    <div class="sec-label"><span class="sec-num">02</span>After Effects template architecture</div>
+    <h2>Identical contract. Unique content.</h2>
+
+    <p>Every template in the library shares the same structural specification regardless of the recipe it contains. The specification defines reserved layer names, required composition names, the expression pattern for variety switching, and the asset naming conventions that the render pipeline depends on.</p>
+
+    <h3>2.1 — Composition structure</h3>
+
+    <p>Each template contains exactly two compositions whose names are reserved and must not be altered.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Composition name</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>MILK_EXPORT</code></td>
+          <td>The render target. NexRender locates this composition by name to initiate the render job. Contains all variable text layers and the final composited output.</td>
+        </tr>
+        <tr>
+          <td><code>MILK_SOURCE</code></td>
+          <td>The source footage composition. Contains the original recipe video, the vessel precomp hierarchy, and depth map layers. Referenced by MILK_EXPORT.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout-label">Critical</div>
+      <p>NexRender resolves the render target by composition name only. A composition with a corrected or abbreviated name — <code>Milk_Export</code>, <code>MILKEXPORT</code>, <code>export</code> — will not be found. The render job will fail silently or target the wrong composition with no error output.</p>
+    </div>
+
+    <h3>2.2 — The MILK_LABEL layer</h3>
+
+    <p>A placeholder layer named <code>MILK_LABEL</code> exists in every template. It is blank in the source file. NexRender replaces this layer with the user-uploaded label asset at job execution time by matching the layer name string exactly.</p>
+
+    <ul class="cs-list">
+      <li>The layer is pre-parented to a null object positioned at the vessel label zone</li>
+      <li>The null carries the vessel-specific transform: position, rotation, and the perspective distortion derived from the depth scan</li>
+      <li>Displacer Pro applies the depth map to the incoming label asset via the null's Effect controls, adding surface curvature and foreshortening</li>
+      <li>The layer blend mode and track matte are set in the source file; the replacement asset inherits them</li>
+      <li>The layer name <code>MILK_LABEL</code> is case-sensitive and must match exactly as written</li>
+    </ul>
+
+    <h3>2.3 — Variable text layers</h3>
+
+    <p>Four text layers in <code>MILK_EXPORT</code> hold the variable values. Their names are reserved. NexRender's <code>setText</code> action targets them by name and writes the schema keyword value before rendering begins.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Layer name</th><th>Written by</th><th>Read by</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>VARIETY_VAR</code></td>
+          <td>NexRender setText action</td>
+          <td>Opacity expressions on each milk-variety precomp</td>
+        </tr>
+        <tr>
+          <td><code>VESSEL_VAR</code></td>
+          <td>NexRender setText action</td>
+          <td>Opacity expressions on vessel-type precomps</td>
+        </tr>
+        <tr>
+          <td><code>CAP_VAR</code></td>
+          <td>NexRender setText action</td>
+          <td>Opacity expressions on cap-colour layers within active vessel precomp</td>
+        </tr>
+        <tr>
+          <td><code>SIZE_VAR</code></td>
+          <td>NexRender setText action</td>
+          <td>Scale expression on vessel null; size-specific comp switch expression</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>2.4 — Expression pattern</h3>
+
+    <p>All visibility control uses the same expression pattern. An expression on a precomp's Opacity property reads the source text of the relevant variable layer and evaluates it against the keyword value associated with that precomp. The expression returns <code>100</code> if the strings match, <code>0</code> if they do not.</p>
+
+    <div class="code-block">
+<span class="cm">// Opacity expression — applied to each variety precomp layer
+// Replace "chocolate" with the keyword for this precomp
+// Replace "VARIETY_VAR" with the controlling text layer name</span>
+
+<span class="ck">var</span> ctrl = thisComp.layer(<span class="cs">"VARIETY_VAR"</span>).sourceText.value;
+ctrl === <span class="cs">"chocolate"</span> ? <span class="cv">100</span> : <span class="cv">0</span>;
+    </div>
+
+    <p>This pattern is intentionally minimal. The text layer contains the raw keyword string with no whitespace, no casing variation, and no formatting. Any deviation — a trailing space, a capitalisation difference — causes the expression to evaluate to <code>0</code> and the precomp to be invisible in the render.</p>
+
+    <h3>2.5 — Asset naming constraints</h3>
+
+    <p>Long file names cause decompression failures when NexRender unpacks the project bundle for rendering. This limit was discovered during testing and is not documented by NexRender. All source assets in the templates use the following conventions:</p>
+
+    <ul class="cs-list">
+      <li>Source footage files: maximum 20 characters including extension</li>
+      <li>Depth map files: prefixed <code>dm_</code>, short descriptor, extension — e.g. <code>dm_jug_hg.exr</code></li>
+      <li>Precomp assets: prefixed with a two-letter vessel code — e.g. <code>jg_white_hg</code> (jug, white, half-gallon)</li>
+      <li>No spaces in any asset name; underscores only</li>
+      <li>No special characters, accented characters, or Unicode in asset paths</li>
+    </ul>
+
+  </section>
+
+  <!-- ── 03 SCHEMA ── -->
+  <section class="section" id="schema">
+    <div class="sec-label"><span class="sec-num">03</span>Data schema</div>
+    <h2>One keyword table. Three systems.</h2>
+
+    <p>The Milk Dynamic Video Schema defines the canonical keyword string for every variable in the system. The front-end form labels, the backend API field names, the NexRender action targets, and the After Effects expression comparisons all reference the same document. The schema is the only interface between the three layers.</p>
+
+    <div class="callout-info">
+      <p>The schema was authored before any template was built. Templates were written to satisfy the schema, not the other way around. Introducing a new variable requires a schema revision before any template or API change is made.</p>
+    </div>
+
+    <h3>Full variable table — v2</h3>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Variable</th><th>AE layer name</th><th>Accepted keyword values</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Milk variety</td>
+          <td><code>VARIETY_VAR</code></td>
+          <td><code>whole</code> / <code>strawberry</code> / <code>chocolate</code> / <code>skim</code> / <code>2percent</code> / <code>lactose-free</code></td>
+          <td>Per-recipe availability. Recipes not containing chocolate milk do not include the chocolate precomp set.</td>
+        </tr>
+        <tr>
+          <td>Vessel type</td>
+          <td><code>VESSEL_VAR</code></td>
+          <td><code>jug</code> / <code>carton</code> / <code>bottle</code></td>
+          <td>Determines active vessel precomp hierarchy. Each vessel type has its own depth-scanned label placement null.</td>
+        </tr>
+        <tr>
+          <td>Cap colour</td>
+          <td><code>CAP_VAR</code></td>
+          <td><code>red</code> / <code>blue</code> / <code>white</code> / <code>green</code> / <code>yellow</code> / <code>orange</code> / <code>purple</code> / <code>black</code> / <code>brown</code> / <code>pink</code></td>
+          <td>Cap layer visibility is controlled by expression within the active vessel precomp. Not all cap colours are available for all vessel types.</td>
+        </tr>
+        <tr>
+          <td>Carton size</td>
+          <td><code>SIZE_VAR</code></td>
+          <td><code>half-pint</code> / <code>pint</code> / <code>quart</code> / <code>half-gallon</code></td>
+          <td>Drives scale expression on vessel null. Non-standard sizes use a size-specific precomp with adjusted depth map.</td>
+        </tr>
+        <tr>
+          <td>Label asset</td>
+          <td><code>MILK_LABEL</code></td>
+          <td>User-uploaded PNG or JPG. No keyword — the layer is replaced by NexRender directly.</td>
+          <td>Accepted dimensions: minimum 500&times;500 px. Transparent background supported. Labels with transparency composite against vessel surface colour.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Keyword string rules</h3>
+
+    <ul class="cs-list">
+      <li>All keywords are lowercase. No exceptions.</li>
+      <li>Multi-word values use hyphens only — no spaces, no underscores</li>
+      <li>The keyword string must match the After Effects expression comparison character-for-character, including hyphenation</li>
+      <li>New keyword values cannot be added without a corresponding precomp layer and expression branch in all affected templates</li>
+    </ul>
+
+  </section>
+
+  <!-- ── 04 NEXRENDER ── -->
+  <section class="section" id="nexrender">
+    <div class="sec-label"><span class="sec-num">04</span>NexRender integration</div>
+    <h2>What NexRender does and does not do.</h2>
+
+    <p>NexRender is a headless After Effects render automation system. It accepts a job manifest — a JSON object — opens the specified AE project on a render node, makes the modifications described in the manifest, and executes the render queue. It has no awareness of the content it is rendering. It reads strings and writes them to layers.</p>
+
+    <h3>4.1 — Job manifest structure</h3>
+
+    <div class="code-block">
+<span class="cm">// Simplified NexRender job manifest</span>
+{
+  <span class="cs">"template"</span>: {
+    <span class="cs">"src"</span>: <span class="cs">"s3://milkpep-vd-assets/templates/[recipe_id].aep"</span>,
+    <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>
+  },
+  <span class="cs">"assets"</span>: [
+    {
+      <span class="cs">"src"</span>: <span class="cs">"[user label URL]"</span>,
+      <span class="cs">"type"</span>: <span class="cs">"image"</span>,
+      <span class="cs">"layerName"</span>: <span class="cs">"MILK_LABEL"</span>
+    }
+  ],
+  <span class="cs">"actions"</span>: {
+    <span class="cs">"prerender"</span>: [
+      {
+        <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-prerender-set-text"</span>,
+        <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>,
+        <span class="cs">"layerName"</span>: <span class="cs">"VARIETY_VAR"</span>,
+        <span class="cs">"text"</span>: <span class="cs">"chocolate"</span>
+      },
+      {
+        <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-prerender-set-text"</span>,
+        <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>,
+        <span class="cs">"layerName"</span>: <span class="cs">"VESSEL_VAR"</span>,
+        <span class="cs">"text"</span>: <span class="cs">"jug"</span>
+      },
+      {
+        <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-prerender-set-text"</span>,
+        <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>,
+        <span class="cs">"layerName"</span>: <span class="cs">"CAP_VAR"</span>,
+        <span class="cs">"text"</span>: <span class="cs">"brown"</span>
+      },
+      {
+        <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-prerender-set-text"</span>,
+        <span class="cs">"composition"</span>: <span class="cs">"MILK_EXPORT"</span>,
+        <span class="cs">"layerName"</span>: <span class="cs">"SIZE_VAR"</span>,
+        <span class="cs">"text"</span>: <span class="cs">"half-gallon"</span>
+      }
+    ],
+    <span class="cs">"postrender"</span>: [
+      {
+        <span class="cs">"module"</span>: <span class="cs">"@nexrender/action-upload"</span>,
+        <span class="cs">"input"</span>: <span class="cs">"[output filename]"</span>,
+        <span class="cs">"dest"</span>: <span class="cs">"s3://milkpep-vd-outputs/[job_id]/"</span>
+      }
+    ]
+  }
+}
+    </div>
+
+    <h3>4.2 — Render node environment</h3>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Parameter</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AE version</td>
+          <td>After Effects 2025 — required. Expressions and effect parameters are version-specific.</td>
+        </tr>
+        <tr>
+          <td>Plugins required</td>
+          <td>Displacer Pro (Jixipix) — must be licensed and installed on the render node. Renders without it will silently omit the depth displacement pass.</td>
+        </tr>
+        <tr>
+          <td>Output codec</td>
+          <td>H.264 MP4 via Adobe Media Encoder render queue. Lossless intermediate is not used due to storage constraints.</td>
+        </tr>
+        <tr>
+          <td>Asset resolution</td>
+          <td>All templates render at 1080&times;1350 (4:5) for social deployment. A 1:1 square crop is generated as a secondary output for some recipes.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>4.3 — Pre-render vs. render-time execution</h3>
+
+    <p>The <code>setText</code> actions are <em>pre-render</em> actions — they execute before the AE render queue is opened. This is critical: AE evaluates expressions at render time against the layer state in the project file. If text layer values are written after the render begins, expressions have already been evaluated and the variable switch has no effect. All variable injection must complete in the pre-render phase.</p>
+
+    <p>The label asset replacement via <code>layerName</code> matching also occurs in the pre-render phase. NexRender locates the layer by name, downloads the asset from the specified URL, and replaces the source footage reference before AE opens the composition.</p>
+
+  </section>
+
+  <!-- ── 05 DEPTH COMPOSITING ── -->
+  <section class="section" id="depth">
+    <div class="sec-label"><span class="sec-num">05</span>Depth compositing pipeline</div>
+    <h2>The label sits in the scene, not on it.</h2>
+
+    <p>The footage was shot with vessel placement and lighting engineered for a subsequent depth-scanning pass. The depth pipeline produces a per-frame displacement map that allows an incoming label asset to be composited with accurate perspective foreshortening, surface curvature, and lighting response — without any manual tracking or matchmoving.</p>
+
+    <h3>5.1 — Depth map generation</h3>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Stage</th><th>Tool</th><th>Output</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Depth prediction</td>
+          <td>Depth Prediction Transformer (DPT) — monocular depth estimation from RGB footage</td>
+          <td>Per-frame 16-bit depth map — brighter values nearer to camera</td>
+        </tr>
+        <tr>
+          <td>Depth refinement</td>
+          <td>Depth Scanner Plugin — analyses surface reflections on vessel to sharpen depth discontinuities at label zone boundary</td>
+          <td>Refined EXR sequence — vessel surface isolated from background</td>
+        </tr>
+        <tr>
+          <td>Label displacement</td>
+          <td>Displacer Pro — applies depth map as a displacement field to the MILK_LABEL layer</td>
+          <td>Label warped to follow vessel surface curvature per frame</td>
+        </tr>
+        <tr>
+          <td>Label alignment</td>
+          <td>AI alignment algorithm (proprietary) — positions label within the designated safe zone using depth discontinuity as the boundary reference</td>
+          <td>Label locked to vessel surface across all frames</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>5.2 — Safe zone</h3>
+
+    <p>Each vessel precomp defines a label safe zone — a rectangular region on the vessel surface within which any processor's label will be legible and correctly composited regardless of label artwork dimensions. The safe zone was defined during the shoot by marking the vessel with reference tape and is encoded in the vessel null's transform values in the template.</p>
+
+    <p>The MILK_LABEL layer is scaled to fill the safe zone by default. Labels with non-standard aspect ratios are letterboxed within the safe zone; the letterbox background matches the vessel colour inferred from the cap colour variable.</p>
+
+    <h3>5.3 — Lighting response</h3>
+
+    <p>The depth map drives a secondary luminosity pass on the MILK_LABEL layer. The same practical light used on the original shoot is simulated as a directional gradient, derived from the depth map's surface normal approximation. This gives the label the appearance of being lit by the same source as the surrounding footage rather than pasted flat over it.</p>
+
+    <div class="callout">
+      <div class="callout-label">Constraint</div>
+      <p>The lighting simulation is an approximation. Labels with strong internal contrast — e.g. a bright white panel on a dark background — may show visible seaming at the label boundary under certain lighting conditions. The safe zone was positioned during the shoot to keep the vessel in the most favourable lighting angle for all cap colour variants.</p>
+    </div>
+
+  </section>
+
+  <!-- ── 06 COMBINATORICS ── -->
+  <section class="section" id="combinatorics">
+    <div class="sec-label"><span class="sec-num">06</span>Combinatorics</div>
+    <h2>Where 12,460 comes from.</h2>
+
+    <p>The 12,460 figure is the total number of distinct renders the system can produce across all recipes, vessel configurations, milk varieties, cap colours, and output formats. It is not a count of renders produced — it is the scope of the system. Each combination is a valid, distinct After Effects render with a unique precomp configuration, label placement, and expression state.</p>
+
+    <div class="callout-info">
+      <p>Not all combinations are available for all recipes. A recipe that does not use chocolate milk does not expose the chocolate variety option. The totals below reflect the maximum available per-variable count; actual per-recipe combination counts are lower and vary by recipe.</p>
+    </div>
+
+    <table class="combo-table">
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Count</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Recipes (templates)</td>
+          <td>28</td>
+          <td>Each recipe is a discrete AE project file with unique footage</td>
+        </tr>
+        <tr>
+          <td>Vessel types</td>
+          <td>3</td>
+          <td>Jug, carton, bottle — each with independent depth scan and label placement</td>
+        </tr>
+        <tr>
+          <td>Carton sizes</td>
+          <td>4</td>
+          <td>Half-pint, pint, quart, half-gallon — size-specific precomps for non-standard formats</td>
+        </tr>
+        <tr>
+          <td>Milk varieties</td>
+          <td>6</td>
+          <td>Whole, strawberry, chocolate, skim, 2%, lactose-free — recipe availability varies</td>
+        </tr>
+        <tr>
+          <td>Cap colours</td>
+          <td>10</td>
+          <td>Per vessel type; not all colours available for all vessels</td>
+        </tr>
+        <tr>
+          <td>Output formats</td>
+          <td>2</td>
+          <td>4:5 video (1080&times;1350) and 1:1 still image</td>
+        </tr>
+        <tr class="total-row">
+          <td>Total combinations</td>
+          <td>12,460</td>
+          <td>28 &times; 3 &times; 4 &times; 6 &times; 10 &times; 2, adjusted for per-recipe availability constraints</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>The complexity implied by this number lives entirely in the template build. Every cap colour that needed to work required a precomp layer, a colour-matched asset, and an expression branch. Every carton size that differed from the default required a size-specific composition with its own depth-adjusted label transform and a corresponding safe zone calibration. Every milk variety required a footage variant — white milk and chocolate milk have visibly different liquid colour — with a separate depth-composited label zone.</p>
+
+    <p>At render time, NexRender writes four keyword strings and replaces one layer. The 12,460 combinations are resolved before the render job is ever queued.</p>
+
+  </section>
+
+  <!-- ── 07 FAILURE MODES ── -->
+  <section class="section" id="failures">
+    <div class="sec-label"><span class="sec-num">07</span>Known failure modes</div>
+    <h2>What breaks and why.</h2>
+
+    <p>The following failure modes were identified during alpha and beta testing. Most are silent — NexRender does not surface AE expression errors in its job logs, and a render that completes with the wrong variable state is indistinguishable from a correct render at the API level.</p>
+
+    <table class="data-table failure-table">
+      <thead>
+        <tr><th>Failure</th><th>Cause</th><th>Symptom</th><th>Resolution</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Wrong precomp visible</td>
+          <td>Keyword casing mismatch between API value and AE expression comparison string</td>
+          <td>Render completes. Output shows default (first) precomp regardless of user selection.</td>
+          <td>Schema enforcement at API validation layer. All keywords lowercase before manifest construction.</td>
+        </tr>
+        <tr>
+          <td>Label not replaced</td>
+          <td><code>MILK_LABEL</code> layer name has been edited, or layer was accidentally renamed during template maintenance</td>
+          <td>Render completes. Output shows blank vessel surface — no label visible.</td>
+          <td>Template naming lock convention: reserved layer names documented and protected via AE script that warns on save if reserved names are absent.</td>
+        </tr>
+        <tr>
+          <td>Composition not found</td>
+          <td><code>MILK_EXPORT</code> composition name altered</td>
+          <td>NexRender job fails with a composition-not-found error. No render produced.</td>
+          <td>Same naming lock convention. This failure is at least visible in the job log.</td>
+        </tr>
+        <tr>
+          <td>Decompression failure</td>
+          <td>Asset file name exceeds ~20 characters or contains special characters</td>
+          <td>NexRender fails to unpack the project bundle. Job fails before render begins.</td>
+          <td>Asset naming convention enforced at template authoring time. All names reviewed against convention before template is committed to S3.</td>
+        </tr>
+        <tr>
+          <td>Depth displacement missing</td>
+          <td>Displacer Pro not installed or not licensed on render node</td>
+          <td>Render completes. Label appears flat on vessel — no surface curvature or foreshortening. Often not immediately obvious.</td>
+          <td>Plugin license and installation verified on render node environment. Visual QA checklist includes depth displacement verification pass.</td>
+        </tr>
+        <tr>
+          <td>Expression evaluates to 0 on all precomps</td>
+          <td>Text layer contains trailing whitespace from API serialisation</td>
+          <td>All variety precomps hidden. Render completes with transparent vessel area.</td>
+          <td>API trims all keyword values before manifest construction. Schema defines no leading or trailing whitespace as valid.</td>
+        </tr>
+        <tr>
+          <td>Label scaled incorrectly</td>
+          <td>Uploaded label asset dimensions outside accepted range (&lt;500&times;500 px)</td>
+          <td>Label visible but undersized relative to safe zone, or pixelated at render resolution.</td>
+          <td>Front-end validation enforces minimum upload dimensions before job submission. API rejects out-of-spec assets before manifest construction.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>AE version sensitivity</h3>
+    <p>Templates built in After Effects 2025 use expression engine features and effect parameter names that differ from AE 2023 and earlier. Running a template in an older AE version on a misconfigured render node will cause expression errors that are not surfaced in the NexRender log. The render may complete with all precomps defaulting to 0 opacity. The AE version on the render node is pinned and verified as part of the environment setup.</p>
+
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="cs-footer">
+    <p>Studio David Preli &mdash; <a href="https://davidpreli.com">davidpreli.com</a></p>
+    <p><a href="./milkpep-case-study.html">&larr; MilkPEP Dynamic Videos case study</a> &mdash; Client: MilkPEP / USDA &mdash; Agency: GALE Partners &mdash; 2023</p>
+  </footer>
+
+</div>
+
+<script>
+function reportHeight() {
+  var h = Math.max(
+    document.body.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.scrollHeight,
+    document.documentElement.offsetHeight
+  );
+  window.parent.postMessage({ type: 'resize', height: h }, '*');
+}
+reportHeight();
+window.addEventListener('load', reportHeight);
+setTimeout(reportHeight, 500);
+setTimeout(reportHeight, 1500);
+</script>
+</body>
+</html>
