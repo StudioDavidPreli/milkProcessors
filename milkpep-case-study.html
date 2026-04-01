@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MilkPEP Dynamic Videos — Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #141414;
+  --panel:   #1e1e1e;
+  --border:  #2e2e2e;
+  --accent:  #fffef1;
+  --accent2: #b9b0ff;
+  --accent3: #e8b86d;
+  --text:    #e1e1e1;
+  --muted:   #888888;
+  --muted2:  #aaaaaa;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.75;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+/* ── Layout ── */
+.page { max-width: 860px; margin: 0 auto; padding: 56px 28px 160px; }
+
+/* ── Header ── */
+.cs-header { margin-bottom: 56px; border-bottom: 1px solid var(--border); padding-bottom: 32px; }
+
+.cs-eyebrow {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.cs-title {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(36px, 7vw, 64px);
+  color: var(--accent);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+
+.cs-subtitle {
+  font-size: 13px;
+  color: var(--muted2);
+  margin-bottom: 24px;
+}
+
+.cs-meta {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.cs-meta-item { display: flex; flex-direction: column; gap: 3px; }
+.cs-meta-label { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.cs-meta-value { font-size: 12px; color: var(--text); }
+
+/* ── Section titles ── */
+.sec-label {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.sec-num {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--accent);
+  margin-right: 4px;
+}
+
+h2 {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 26px;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  margin-top: 32px;
+}
+
+/* ── Body text ── */
+p { margin-bottom: 16px; color: var(--text); }
+
+p.lede {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--muted2);
+  margin-bottom: 28px;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Sections ── */
+.section { margin-bottom: 64px; }
+
+/* ── Pull quote ── */
+.pullquote {
+  border-left: 2px solid var(--accent);
+  padding: 16px 24px;
+  margin: 32px 0;
+  background: rgba(255,254,241,0.03);
+}
+
+.pullquote p {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--muted2);
+  margin: 0;
+}
+
+/* ── Workflow steps ── */
+.workflow { display: flex; flex-direction: column; gap: 2px; margin: 28px 0; }
+
+.wf-step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+
+.wf-num {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 14px;
+}
+
+.wf-num-inner {
+  width: 28px; height: 28px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.wf-line {
+  flex: 1;
+  width: 1px;
+  background: var(--border);
+  margin: 4px auto 0;
+}
+
+.wf-step:last-child .wf-line { display: none; }
+
+.wf-body {
+  padding: 10px 0 28px 16px;
+}
+
+.wf-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.wf-body p { margin-bottom: 8px; font-size: 12px; color: var(--muted2); }
+.wf-body p:last-child { margin-bottom: 0; }
+
+/* ── Tool pills ── */
+.tools { display: flex; gap: 6px; flex-wrap: wrap; margin: 16px 0; }
+
+.tool-pill {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 4px 10px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
+.tool-pill.green  { border-color: rgba(255,254,241,0.3); color: var(--accent); }
+.tool-pill.purple { border-color: rgba(185,176,255,0.4); color: var(--accent2); }
+.tool-pill.amber  { border-color: rgba(232,184,109,0.4); color: var(--accent3); }
+
+/* ── Asset placeholders ── */
+.asset-slot {
+  background: var(--panel);
+  border: 1px dashed var(--border);
+  border-radius: 2px;
+  padding: 32px 24px;
+  text-align: center;
+  margin: 24px 0;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.asset-slot .asset-label { color: var(--muted2); margin-top: 6px; font-size: 11px; font-style: italic; }
+
+/* ── GIF asset ── */
+.gif-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+@media (max-width: 580px) { .gif-grid { grid-template-columns: 1fr; } }
+
+.gif-wrap {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.gif-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gif-caption {
+  padding: 8px 12px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Vimeo embed ── */
+.vimeo-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  margin: 16px 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.vimeo-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+
+.vimeo-caption {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: -8px;
+  margin-bottom: 16px;
+  padding-left: 2px;
+}
+
+/* ── Vertical video embed (4:5) ── */
+.video-wrap-vertical {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 4/5;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+
+.video-wrap-vertical iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ── Schema table ── */
+.schema-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 11px;
+}
+
+.schema-table th {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+}
+
+.schema-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(46,46,46,0.5);
+  color: var(--muted2);
+  vertical-align: top;
+}
+
+.schema-table td:first-child {
+  color: var(--accent);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.schema-table td:nth-child(2) {
+  color: var(--accent3);
+  font-size: 10px;
+}
+
+.schema-table tr:last-child td { border-bottom: none; }
+
+/* ── Combination matrix ── */
+.combo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+
+@media (max-width: 520px) { .combo-grid { grid-template-columns: 1fr; } }
+
+.combo-cell {
+  background: var(--panel);
+  padding: 16px 18px;
+}
+
+.combo-cell-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.combo-cell-count {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.combo-cell-desc {
+  font-size: 10px;
+  color: var(--muted2);
+}
+
+/* ── Total callout ── */
+.total-callout {
+  background: rgba(255,254,241,0.03);
+  border: 1px solid rgba(255,254,241,0.15);
+  border-radius: 2px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+
+.total-callout-num {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 48px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.total-callout-desc {
+  font-size: 12px;
+  color: var(--muted2);
+  max-width: 480px;
+}
+
+/* ── Output grid (side-by-side video columns) ── */
+.output-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+  align-items: start;
+}
+
+@media (max-width: 580px) { .output-grid { grid-template-columns: 1fr; } }
+
+.output-col { display: flex; flex-direction: column; }
+
+.output-video {
+  position: relative;
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px 2px 0 0;
+  overflow: hidden;
+}
+
+/* ── Footer ── */
+.cs-footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.cs-footer p { font-size: 10px; color: var(--muted); margin: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <header class="cs-header">
+    <div class="cs-eyebrow">Case Study &mdash; Studio David Preli &mdash; 2023</div>
+    <h1 class="cs-title">MilkPEP Dynamic Videos</h1>
+    <p class="cs-subtitle">A self-service video personalisation tool for independent milk processors &mdash; built on After Effects, NexRender, and a custom data schema</p>
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Client</span>
+        <span class="cs-meta-value">MilkPEP / USDA</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Agency</span>
+        <span class="cs-meta-value">GALE Partners</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">Production Design, AE Architecture, Schema Design</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Pipeline</span>
+        <span class="cs-meta-value">After Effects &rarr; NexRender &rarr; Django</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Output scope</span>
+        <span class="cs-meta-value">12,460 possible combinations</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── THE TOOL ── -->
+  <section class="section">
+    <div class="sec-label"><span class="sec-num">00</span>The tool</div>
+
+    <div class="gif-wrap">
+      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/toolUse.gif" alt="Screen recording — tool walkthrough: gallery, detail, customise, download" loading="lazy">
+      <div class="gif-caption">Tool walkthrough &mdash; gallery &rarr; detail &rarr; customise &rarr; download</div>
+    </div>
+
+  </section>
+
+  <!-- ── THE PROBLEM ── -->
+  <section class="section">
+    <div class="sec-label"><span class="sec-num">01</span>The problem</div>
+    <h2>Thousands of milk processors. No marketing assets.</h2>
+
+    <p class="lede">Most dairy in the United States is produced by small, family-owned processors. Not large operations with in-house creative teams. Small ones.</p>
+
+    <p>MilkPEP and the USDA identified a gap: processors without dedicated marketing departments had no access to high-quality, professionally art-directed promotional materials for social and web deployment. The category-level content being produced at the national level was not reaching the shelf, because the brands on the shelf had no way to make it their own.</p>
+
+    <p>A generic asset featuring a white milk jug does not serve a processor whose brand is a yellow carton with a red cap. The asset has to carry their identity to be usable. And producing individual custom assets for thousands of processors by hand is not a production model.</p>
+
+    <div class="pullquote">
+      <p>The constraint was not creative. It was systemic. The tool had to make professional-grade personalisation available to people who had never used After Effects and never would.</p>
+    </div>
+
+    <p>The brief was to build a self-service customisation tool: a web interface through which any processor could select a recipe video from a curated library, specify their brand variables — label, vessel type, cap colour, milk variety — and receive a finished, broadcast-quality video asset with their product composited into the original footage.</p>
+  </section>
+
+  <!-- ── PRODUCTION ── -->
+  <section class="section">
+    <div class="sec-label"><span class="sec-num">02</span>Production</div>
+    <h2>The shoot was designed for the system, not just the camera.</h2>
+
+    <p>The recipe videos were shot on a professional production with a single constraint that governed every decision: the milk vessel had to be placed and lit with enough precision that any processor&rsquo;s label could be composited into the scene later, regardless of their product&rsquo;s geometry.</p>
+
+    <p>This required maintaining exact continuity of vessel placement and orientation across every recipe — the same physical position in frame, the same lighting angle on the vessel surface, the same camera focal distance. What looked like a simple food video to the viewer was, at the production level, a carefully controlled reference for the depth-scanning compositing system that would follow.</p>
+
+    <div class="gif-grid">
+      <div class="gif-wrap">
+        <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/bts0.jpg" alt="Behind the scenes production still — vessel placement on set" loading="lazy">
+        <div class="gif-caption">Production &mdash; vessel placement on set</div>
+      </div>
+      <div class="gif-wrap">
+        <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/bts1.jpg" alt="Behind the scenes production still — lighting setup" loading="lazy">
+        <div class="gif-caption">Production &mdash; lighting and focus continuity</div>
+      </div>
+    </div>
+
+    <div class="gif-wrap" style="margin: 20px 0;">
+      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/depth.gif" alt="Depth scan pass — AI-generated depth map used for label compositing" loading="lazy">
+      <div class="gif-caption">Depth pass &mdash; per-frame depth map driving label placement</div>
+    </div>
+    <p>Footage was enhanced using a depth-scanning workflow to generate per-frame depth maps. Using a Depth Prediction Transformer, reflections on the vessel surface were analysed to produce an accurate spatial map of the scene. An AI alignment algorithm then used this map to place the user&rsquo;s uploaded label into the designated safe zone with correct perspective, foreshortening, and lighting response. The label does not sit on the footage. It sits in it.</p>
+
+    <div class="tools">
+      <span class="tool-pill amber">Depth Scanner Plugin</span>
+      <span class="tool-pill amber">Displacer Pro</span>
+      <span class="tool-pill amber">Depth Prediction Transformer</span>
+      <span class="tool-pill green">After Effects</span>
+    </div>
+
+  </section>
+
+  <!-- ── TEMPLATE ARCHITECTURE ── -->
+  <section class="section">
+    <div class="sec-label"><span class="sec-num">03</span>Template architecture</div>
+    <h2>One template per recipe. Every template shares the same contract.</h2>
+
+    <p>Each recipe in the library has a corresponding After Effects project file built to a strict internal specification. The specification is not documentation written after the fact. It is the architecture. Every template was built to it from the start, because the rendering system has no tolerance for deviation — NexRender does not interpret, it reads.</p>
+
+    <div class="workflow">
+
+      <div class="wf-step">
+        <div class="wf-num">
+          <div class="wf-num-inner">1</div>
+          <div class="wf-line"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-title">Export composition naming</div>
+          <div class="tools">
+            <span class="tool-pill green">After Effects</span>
+            <span class="tool-pill green">NexRender</span>
+          </div>
+          <p>Each template contains exactly two compositions whose names are fixed. NexRender locates the render target by composition name — not by path, not by index. Renaming either composition breaks the render job silently. The composition names are specified in the schema and treated as reserved strings throughout the project lifecycle.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">
+          <div class="wf-num-inner">2</div>
+          <div class="wf-line"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-title">The MILK_LABEL layer</div>
+          <div class="tools">
+            <span class="tool-pill green">After Effects</span>
+            <span class="tool-pill amber">Depth Scanner Plugin</span>
+          </div>
+          <p>Every template contains a layer named <em>MILK_LABEL</em>. This layer is blank in the source file. When a render job is triggered, NexRender replaces this layer with the user-uploaded label asset via the job manifest. The name <em>MILK_LABEL</em> is the only identifier the system uses to find the target. It cannot be abbreviated, translated, or reformatted. It is the layer name exactly as written.</p>
+          <p>The layer is pre-positioned and pre-parented to the vessel in the composition, so the incoming label asset inherits the correct transform data — position, rotation, scale, and the depth-derived distortion — without any additional instruction. The user uploads a flat image. The template does the placement work.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">
+          <div class="wf-num-inner">3</div>
+          <div class="wf-line"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-title">Expression-driven milk variety switching</div>
+          <div class="tools">
+            <span class="tool-pill green">After Effects Expressions</span>
+          </div>
+          <p>Milk variety — whole, strawberry, chocolate, and so on — determines which precomposition is visible in the final render. This is controlled by three text layers in the export composition. Each text layer holds a keyword value. Expressions on the precomposition layers read these keyword values and evaluate them against a lookup to set layer opacity. The text layer content is the variable. The expression is the conditional logic. NexRender writes to the text layers; After Effects evaluates the result at render time.</p>
+          <p>Recipes that do not use chocolate milk do not include the chocolate precomposition at all. Each recipe has a specific composition set corresponding to the vessel variants available for that product. The schema specifies which compositions are present and what keyword values each one responds to.</p>
+
+          <div class="gif-grid">
+            <div class="gif-wrap">
+              <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/expressions.png" alt="After Effects timeline showing expression layers controlling precomp opacity" loading="lazy">
+              <div class="gif-caption">After Effects &mdash; expression layers controlling variety switching</div>
+            </div>
+            <div class="gif-wrap">
+              <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/mainComp.png" alt="After Effects main composition timeline structure" loading="lazy">
+              <div class="gif-caption">Main composition &mdash; AE timeline overview</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">
+          <div class="wf-num-inner">4</div>
+          <div class="wf-line"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-title">Asset naming and file constraints</div>
+          <div class="tools">
+            <span class="tool-pill green">NexRender</span>
+          </div>
+          <p>Long asset names cause decompression failures in the NexRender pipeline. This is not a documented limit — it was found in testing. All source assets in the templates use short, unambiguous names. The depth map files, the precomposition source footage, and the label placeholder all follow a naming convention defined in the schema. A file named correctly in the wrong folder is as broken as a file named incorrectly anywhere.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ── THE SCHEMA ── -->
+  <section class="section">
+    <div class="sec-label"><span class="sec-num">04</span>The schema</div>
+    <h2>A shared naming convention is the only interface between the template, the tool, and the render system.</h2>
+
+    <p>The schema is a specification document that defines the exact keyword values used at every point in the pipeline: the form field labels in the web tool, the variables the backend passes to NexRender, the composition names the render job targets, and the expression keywords the After Effects template evaluates. If any of these disagree, the render either fails or produces the wrong output.</p>
+
+    <p>The schema was designed before any template was built. It is the contract the templates were written to satisfy, not a record of what they happen to contain.</p>
+
+    <h3>Variable mapping</h3>
+
+    <table class="schema-table">
+      <thead>
+        <tr>
+          <th>Layer / field name</th>
+          <th>Keyword value</th>
+          <th>Controls</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MILK_LABEL</td>
+          <td>&mdash;</td>
+          <td>Layer target for user-uploaded label asset; replaced by NexRender at job execution</td>
+        </tr>
+        <tr>
+          <td>milk_variety</td>
+          <td>whole / strawberry / chocolate / skim&hellip;</td>
+          <td>Expression keyword; drives precomp opacity via conditional lookup in export comp</td>
+        </tr>
+        <tr>
+          <td>vessel_type</td>
+          <td>jug / carton / bottle&hellip;</td>
+          <td>Determines which vessel precomp set is active; maps to composition name in schema</td>
+        </tr>
+        <tr>
+          <td>cap_color</td>
+          <td>red / blue / white / green&hellip;</td>
+          <td>Drives cap layer visibility within active vessel precomp</td>
+        </tr>
+        <tr>
+          <td>carton_size</td>
+          <td>half-pint / pint / quart / half-gallon&hellip;</td>
+          <td>Scales vessel and label placement via parented null; size-specific compositions for non-standard formats</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Every keyword in the schema has a single canonical spelling. The frontend form, the backend API, and the After Effects expression all use the same string. There is no translation layer. A discrepancy anywhere in that chain produces a render where the variable is ignored — which means a finished video with the wrong product in frame, or no product at all. The schema is what makes silent failure impossible.</p>
+
+    <div class="pullquote">
+      <p>NexRender does not know what a milk processor is. It knows how to write a value to a text layer in an After Effects composition and trigger a render. The schema is everything between those two facts.</p>
+    </div>
+
+    <div class="gif-wrap" style="margin: 20px 0;">
+      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/Schema.png" alt="Milk Dynamic Video Schema documentation — variable naming conventions" loading="lazy">
+      <div class="gif-caption">Milk Dynamic Video Schema v2 &mdash; variable definitions and naming conventions</div>
+    </div>
+
+    <div style="margin-top: 28px; padding: 14px 20px; border: 1px solid rgba(255,254,241,0.15); border-radius: 2px; background: rgba(255,254,241,0.03);">
+      <p style="margin:0; font-size: 11px; color: var(--muted2);">The complete variable specification, NexRender job manifest structure, expression syntax, and known failure modes are documented in the <a href="./milkpep-dynamic-videos-technical.html">technical specification</a>.</p>
+    </div>
+
+  </section>
+
+  <!-- ── THE TOOL ── -->
+  <section class="section">
+    <div class="sec-label"><span class="sec-num">05</span>The web tool</div>
+    <h2>Three steps. One finished video.</h2>
+
+    <p>The front end, built in Next.js against a Django API, presents the system as a three-step workflow: browse a gallery of recipe templates, review the asset details, then customise and submit. The complexity of the rendering pipeline is entirely invisible to the user.</p>
+
+    <div class="workflow">
+
+      <div class="wf-step">
+        <div class="wf-num">
+          <div class="wf-num-inner">1</div>
+          <div class="wf-line"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-title">Gallery — browse templates</div>
+          <div class="tools">
+            <span class="tool-pill purple">Next.js</span>
+            <span class="tool-pill purple">AWS S3</span>
+          </div>
+          <p>The landing page renders a responsive grid of template cards. Each card shows the recipe thumbnail, run time, file size, and asset type. The thumbnail images are served from S3 with preloads for the first visible rows. A pencil icon badge on each card indicates the asset is customisable. Skeleton loading states are handled with <em>react-loading-skeleton</em> while the template list hydrates from the API.</p>
+
+          <div class="gif-wrap" style="margin: 20px 0;">
+            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/customAssets.jpg" alt="MilkPEP Custom Asset Generator — template gallery grid" loading="lazy">
+            <div class="gif-caption">customizer.milkpep.org &mdash; template gallery</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">
+          <div class="wf-num-inner">2</div>
+          <div class="wf-line"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-title">Asset detail — review before customising</div>
+          <div class="tools">
+            <span class="tool-pill purple">Next.js</span>
+            <span class="tool-pill purple">Django API</span>
+          </div>
+          <p>Selecting a template navigates to the asset detail page, which shows a larger preview of the recipe footage alongside the full specification: duration, output file size, available vessel types, and supported milk varieties for that recipe. The processor can verify the asset fits their use case before committing to the customisation step.</p>
+
+          <div class="gif-wrap" style="margin: 20px 0;">
+            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/recipe.jpg" alt="Asset detail page — recipe overview with run time, file size, and available options" loading="lazy">
+            <div class="gif-caption">Asset detail &mdash; recipe specification view</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">
+          <div class="wf-num-inner">3</div>
+          <div class="wf-line"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-title">Customise — set variables, upload label, submit</div>
+          <div class="tools">
+            <span class="tool-pill purple">Next.js</span>
+            <span class="tool-pill purple">Django API</span>
+            <span class="tool-pill green">NexRender</span>
+          </div>
+          <p>The customisation form presents only the variables relevant to the selected recipe — vessel type options that exist in the template, milk varieties the template supports, cap colours valid for the chosen vessel. Selecting a combination updates a live preview. The label upload field accepts the processor&rsquo;s brand artwork; the system handles the compositing.</p>
+          <p>On submission, the form values are validated against the schema, a NexRender job manifest is constructed, and the render job is queued. The processor receives a download link when the render is complete.</p>
+
+          <div class="gif-wrap" style="margin: 20px 0;">
+            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/carton.jpg" alt="Customisation form — selecting carton type, milk variety, cap colour and uploading brand label" loading="lazy">
+            <div class="gif-caption">Customise step &mdash; variable selection and label upload</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ── SCALE ── -->
+  <section class="section">
+    <div class="sec-label"><span class="sec-num">06</span>Scale</div>
+    <h2>The complexity lives in the template, not in the render.</h2>
+
+    <p>12,460 is not a count of videos produced. It is the number of valid output combinations the system supports across all recipes, vessel types, vessel sizes, milk varieties, and cap colours. Each combination represents a distinct After Effects render — a unique precomp configuration, label placement, and expression state.</p>
+
+    <div class="total-callout">
+      <div class="total-callout-num">12,460</div>
+      <div class="total-callout-desc">possible unique video outputs — each a distinct combination of recipe, vessel type, vessel size, milk variety, and cap colour</div>
+    </div>
+
+    <p>That number is the product of decisions made during the template build. Every cap colour that needed to work required a corresponding precomp layer and an expression branch. Every vessel size that differed from the default required a size-specific composition with its own label transform. Every milk variety required a footage variant with its own depth-composited label zone. None of this complexity exists at the render-time level — NexRender writes a keyword to a text layer and starts the queue. The complexity was resolved entirely in the template architecture.</p>
+
+    <div class="combo-grid">
+      <div class="combo-cell">
+        <div class="combo-cell-label">Recipes</div>
+        <div class="combo-cell-count">28+</div>
+        <div class="combo-cell-desc">Professionally shot recipe videos — each with its own AE template</div>
+      </div>
+      <div class="combo-cell">
+        <div class="combo-cell-label">Vessel variants</div>
+        <div class="combo-cell-count">4+</div>
+        <div class="combo-cell-desc">Jug, carton, bottle — each with size and geometry variants</div>
+      </div>
+      <div class="combo-cell">
+        <div class="combo-cell-label">Milk varieties</div>
+        <div class="combo-cell-count">6+</div>
+        <div class="combo-cell-desc">Whole, 2%, skim, chocolate — per-recipe availability</div>
+      </div>
+      <div class="combo-cell">
+        <div class="combo-cell-label">Cap colours</div>
+        <div class="combo-cell-count">10+</div>
+        <div class="combo-cell-desc">Per-vessel cap options; each a visible precomp layer</div>
+      </div>
+      <div class="combo-cell">
+        <div class="combo-cell-label">Carton sizes</div>
+        <div class="combo-cell-count">4+</div>
+        <div class="combo-cell-desc">Half-pint through half-gallon; size drives label transform</div>
+      </div>
+      <div class="combo-cell">
+        <div class="combo-cell-label">Output formats</div>
+        <div class="combo-cell-count">2</div>
+        <div class="combo-cell-desc">Video (MP4) and still image — both generated from the same template</div>
+      </div>
+    </div>
+
+    <p>An internal study that accompanied the project noted that what might have taken a software engineer a day or more to code was produced by an in-house motion designer using AI-assisted scripting. That is accurate for the variable-passing code on the backend. The After Effects work — building 28-plus templates that are each structurally identical in contract but visually unique in content, all to a specification precise enough that a web form can control them at render time — was done by hand.</p>
+
+  </section>
+
+  <!-- ── OUTPUT ── -->
+  <section class="section">
+    <div class="sec-label"><span class="sec-num">07</span>Output</div>
+    <h2>A finished asset. No designer required.</h2>
+
+    <p>The end result is a broadcast-quality video with the processor&rsquo;s product composited into the original recipe footage — the label tracked to the vessel surface, lit by the same practical light that lit the shoot, sitting in the same depth plane as the physical vessel that was in the frame.</p>
+
+    <div class="output-grid">
+
+      <div class="output-col">
+        <div class="output-video" style="padding-top: 125%;">
+          <iframe src="https://player.vimeo.com/video/1179292701?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" title="chocolateChaiDonut"></iframe>
+        </div>
+        <div class="gif-caption">Chocolate-Chai Donuts &mdash; jug variant</div>
+        <div class="gif-wrap" style="margin-top: 12px;">
+          <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/batch1.gif" alt="Batch render output example 1" loading="lazy">
+          <div class="gif-caption">Batch output &mdash; render example 1</div>
+        </div>
+      </div>
+
+      <div class="output-col">
+        <div class="output-video" style="padding-top: 125%;">
+          <iframe src="https://player.vimeo.com/video/1179293191?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" title="japaneseMilkBread"></iframe>
+        </div>
+        <div class="gif-caption">Japanese Milk Bread &mdash; carton variant</div>
+        <div class="gif-wrap" style="margin-top: 12px;">
+          <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/batch2.gif" alt="Batch render output example 2" loading="lazy">
+          <div class="gif-caption">Batch output &mdash; render example 2</div>
+        </div>
+      </div>
+
+    </div>
+
+    <p>A processor with no creative department, no production budget, and no knowledge of After Effects submits a form and receives a file indistinguishable from a custom production. That was the brief. That is what the tool does.</p>
+
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="cs-footer">
+    <p>Studio David Preli &mdash; <a href="https://davidpreli.com">davidpreli.com</a></p>
+    <p>Client: MilkPEP / USDA &mdash; Agency: GALE Partners &mdash; 2023 &mdash; <a href="./milkpep-dynamic-videos-technical.html">Technical specification &rarr;</a></p>
+  </footer>
+
+</div>
+
+<script>
+function reportHeight() {
+  var h = Math.max(
+    document.body.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.scrollHeight,
+    document.documentElement.offsetHeight
+  );
+  window.parent.postMessage({ type: 'resize', height: h }, '*');
+}
+
+reportHeight();
+window.addEventListener('load', reportHeight);
+setTimeout(reportHeight, 500);
+setTimeout(reportHeight, 1500);
+</script>
+</body>
+</html>
