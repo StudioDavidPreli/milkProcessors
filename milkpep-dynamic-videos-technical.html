@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MilkPEP x NexRender — Technical Specification</title>
+<title>MilkPEP x NexRender · Technical Specification</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -254,7 +254,7 @@ code {
 }
 
 .cs-list li::before {
-  content: '—';
+  content: '\2013';
   position: absolute;
   left: 0;
   color: var(--muted);
@@ -328,7 +328,7 @@ code {
 
   <!-- ── HEADER ── -->
   <header class="cs-header">
-    <div class="cs-eyebrow">Technical Specification &mdash; Studio David Preli &mdash; 2026</div>
+    <div class="cs-eyebrow">Technical Specification &middot; Studio David Preli &middot; 2026</div>
     <h1 class="cs-title">MilkPEP x NexRender</h1>
     <p class="cs-subtitle">After Effects template architecture, NexRender integration, data schema, and depth compositing pipeline</p>
     <div class="cs-meta">
@@ -443,7 +443,7 @@ code {
 
     <p>Every template in the library shares the same structural specification regardless of the recipe it contains. The specification defines reserved layer names, required composition names, the expression pattern for variety switching, and the asset naming conventions that the render pipeline depends on.</p>
 
-    <h3>2.1 — Composition structure</h3>
+    <h3>2.1 &middot; Composition structure</h3>
 
     <p>Each template contains exactly two compositions whose names are reserved and must not be altered.</p>
 
@@ -468,7 +468,7 @@ code {
       <p>NexRender resolves the render target by composition name only. A composition with a corrected or abbreviated name (<code>Milk_Export</code>, <code>MILKEXPORT</code>, <code>export</code>) will not be found. The render job will fail silently or target the wrong composition with no error output.</p>
     </div>
 
-    <h3>2.2 — The MILK_LABEL layer</h3>
+    <h3>2.2 &middot; The MILK_LABEL layer</h3>
 
     <p>A placeholder layer named <code>MILK_LABEL</code> exists in every template. It is blank in the source file. NexRender replaces this layer with the user-uploaded label asset at job execution time by matching the layer name string exactly.</p>
 
@@ -480,7 +480,7 @@ code {
       <li>The layer name <code>MILK_LABEL</code> is case-sensitive and must match exactly as written</li>
     </ul>
 
-    <h3>2.3 — Variable text layers</h3>
+    <h3>2.3 &middot; Variable text layers</h3>
 
     <p>Four text layers in <code>MILK_EXPORT</code> hold the variable values. Their names are reserved. NexRender's <code>setText</code> action targets them by name and writes the uppercase schema keyword value before rendering begins.</p>
 
@@ -512,7 +512,7 @@ code {
       </tbody>
     </table>
 
-    <h3>2.4 — Expression pattern</h3>
+    <h3>2.4 &middot; Expression pattern</h3>
 
     <p>All visibility control uses the same expression pattern. An expression on a precomp's Opacity property reads the source text of the relevant variable layer and evaluates it against the keyword value associated with that precomp. The expression returns <code>100</code> if the strings match, <code>0</code> if they do not.</p>
 
@@ -527,7 +527,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <p>This pattern is intentionally minimal. The text layer contains the raw uppercase keyword string with no whitespace and no formatting. Any deviation (a trailing space, a capitalisation difference) causes the expression to evaluate to <code>0</code> and the precomp to be invisible in the render.</p>
 
-    <h3>2.5 — Asset naming constraints</h3>
+    <h3>2.5 &middot; Asset naming constraints</h3>
 
     <p>Long file names cause decompression failures when NexRender unpacks the project bundle for rendering. This limit was discovered during testing and is not documented by NexRender. All source assets in the templates use the following conventions:</p>
 
@@ -552,7 +552,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
       <p>The schema was authored before any template was built. Templates were written to satisfy the schema, not the other way around. Introducing a new variable requires a schema revision before any template or API change is made.</p>
     </div>
 
-    <h3>Full variable table — v2</h3>
+    <h3>Full variable table &middot; v2</h3>
 
     <table class="data-table">
       <thead>
@@ -586,7 +586,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
         <tr>
           <td>Label asset</td>
           <td><code>MILK_LABEL</code></td>
-          <td>User-uploaded PNG or JPG. No keyword — the layer is replaced by NexRender directly.</td>
+          <td>User-uploaded PNG or JPG. No keyword: the layer is replaced by NexRender directly.</td>
           <td>Accepted dimensions: minimum 500&times;500 px. Transparent background supported. Labels with transparency composite against vessel surface colour.</td>
         </tr>
       </tbody>
@@ -610,7 +610,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <p>NexRender is a headless After Effects render automation system. It accepts a job manifest (a JSON object), opens the specified AE project on a render node, makes the modifications described in the manifest, and executes the render queue. It has no awareness of the content it is rendering. It reads strings and writes them to layers.</p>
 
-    <h3>4.1 — Job manifest structure</h3>
+    <h3>4.1 &middot; Job manifest structure</h3>
 
     <div class="code-block">
 <span class="cm">// Simplified NexRender job manifest</span>
@@ -664,7 +664,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 }
     </div>
 
-    <h3>4.2 — Render node environment</h3>
+    <h3>4.2 &middot; Render node environment</h3>
 
     <table class="data-table">
       <thead>
@@ -673,11 +673,11 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
       <tbody>
         <tr>
           <td>AE version</td>
-          <td>After Effects 2025 — required. Expressions and effect parameters are version-specific.</td>
+          <td>After Effects 2025: required. Expressions and effect parameters are version-specific.</td>
         </tr>
         <tr>
           <td>Plugins required</td>
-          <td>Displacer Pro (Jixipix) — must be licensed and installed on the render node. Renders without it will silently omit the depth displacement pass.</td>
+          <td>Displacer Pro (Jixipix): must be licensed and installed on the render node. Renders without it will silently omit the depth displacement pass.</td>
         </tr>
         <tr>
           <td>Output codec</td>
@@ -690,7 +690,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
       </tbody>
     </table>
 
-    <h3>4.3 — Pre-render vs. render-time execution</h3>
+    <h3>4.3 &middot; Pre-render vs. render-time execution</h3>
 
     <p>The <code>setText</code> actions are <em>pre-render</em> actions. They execute before the AE render queue is opened. This is critical: AE evaluates expressions at render time against the layer state in the project file. If text layer values are written after the render begins, expressions have already been evaluated and the variable switch has no effect. All variable injection must complete in the pre-render phase.</p>
 
@@ -705,7 +705,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <p>The footage was shot with vessel placement and lighting engineered for a subsequent depth-scanning pass. The depth pipeline produces a per-frame displacement map that allows an incoming label asset to be composited with accurate perspective foreshortening, surface curvature, and lighting response, without any manual tracking or matchmoving.</p>
 
-    <h3>5.1 — Depth map generation</h3>
+    <h3>5.1 &middot; Depth map generation</h3>
 
     <table class="data-table">
       <thead>
@@ -714,34 +714,34 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
       <tbody>
         <tr>
           <td>Depth prediction</td>
-          <td>Depth Prediction Transformer (DPT) — monocular depth estimation from RGB footage</td>
-          <td>Per-frame 16-bit depth map — brighter values nearer to camera</td>
+          <td>Depth Prediction Transformer (DPT): monocular depth estimation from RGB footage</td>
+          <td>Per-frame 16-bit depth map: brighter values nearer to camera</td>
         </tr>
         <tr>
           <td>Depth refinement</td>
-          <td>Depth Scanner Plugin — analyses surface reflections on vessel to sharpen depth discontinuities at label zone boundary</td>
-          <td>Refined EXR sequence — vessel surface isolated from background</td>
+          <td>Depth Scanner Plugin: analyses surface reflections on vessel to sharpen depth discontinuities at label zone boundary</td>
+          <td>Refined EXR sequence: vessel surface isolated from background</td>
         </tr>
         <tr>
           <td>Label displacement</td>
-          <td>Displacer Pro — applies depth map as a displacement field to the MILK_LABEL layer</td>
+          <td>Displacer Pro: applies depth map as a displacement field to the MILK_LABEL layer</td>
           <td>Label warped to follow vessel surface curvature per frame</td>
         </tr>
         <tr>
           <td>Label alignment</td>
-          <td>AI alignment algorithm (proprietary) — positions label within the designated safe zone using depth discontinuity as the boundary reference</td>
+          <td>AI alignment algorithm (proprietary): positions label within the designated safe zone using depth discontinuity as the boundary reference</td>
           <td>Label locked to vessel surface across all frames</td>
         </tr>
       </tbody>
     </table>
 
-    <h3>5.2 — Safe zone</h3>
+    <h3>5.2 &middot; Safe zone</h3>
 
     <p>Each vessel precomp defines a label safe zone: a rectangular region on the vessel surface within which any processor's label will be legible and correctly composited regardless of label artwork dimensions. The safe zone was defined during the shoot by marking the vessel with reference tape and is encoded in the vessel null's transform values in the template.</p>
 
     <p>The MILK_LABEL layer is scaled to fill the safe zone by default. Labels with non-standard aspect ratios are letterboxed within the safe zone; the letterbox background matches the vessel colour inferred from the cap colour variable.</p>
 
-    <h3>5.3 — Lighting response</h3>
+    <h3>5.3 &middot; Lighting response</h3>
 
     <p>The depth map drives a secondary luminosity pass on the MILK_LABEL layer. The same practical light used on the original shoot is simulated as a directional gradient, derived from the depth map's surface normal approximation. This gives the label the appearance of being lit by the same source as the surrounding footage rather than pasted flat over it.</p>
 
@@ -780,17 +780,17 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
         <tr>
           <td>Vessel types</td>
           <td>3</td>
-          <td>Jug, carton, bottle — each with independent depth scan and label placement</td>
+          <td>Jug, carton, bottle: each with independent depth scan and label placement</td>
         </tr>
         <tr>
           <td>Carton sizes</td>
           <td>4</td>
-          <td>Half-pint, pint, quart, half-gallon — size-specific precomps for non-standard formats</td>
+          <td>Half-pint, pint, quart, half-gallon: size-specific precomps for non-standard formats</td>
         </tr>
         <tr>
           <td>Milk varieties</td>
           <td>6</td>
-          <td>Whole, strawberry, chocolate, skim, 2%, lactose-free — recipe availability varies</td>
+          <td>Whole, strawberry, chocolate, skim, 2%, lactose-free: recipe availability varies</td>
         </tr>
         <tr>
           <td>Cap colours</td>
@@ -800,7 +800,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
         <tr>
           <td>Output formats</td>
           <td>2</td>
-          <td>9:16 (all recipes) + 4:5 (select recipes) + 1:1 (select recipes) &mdash; format availability is per-recipe, not universal</td>
+          <td>9:16 (all recipes) + 4:5 (select recipes) + 1:1 (select recipes): format availability is per-recipe, not universal</td>
         </tr>
         <tr class="total-row">
           <td>Total combinations</td>
@@ -830,14 +830,14 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
       <tbody>
         <tr>
           <td>Wrong precomp visible</td>
-          <td>API passes a lowercase value where the expression expects uppercase, or vice versa — e.g. <code>chocolate</code> instead of <code>CHOCOLATE</code></td>
+          <td>API passes a lowercase value where the expression expects uppercase, or vice versa, e.g. <code>chocolate</code> instead of <code>CHOCOLATE</code></td>
           <td>Render completes. Output shows default (first) precomp regardless of user selection.</td>
           <td>Schema enforcement at API validation layer. All keyword values uppercased before manifest construction.</td>
         </tr>
         <tr>
           <td>Label not replaced</td>
           <td><code>MILK_LABEL</code> layer name has been edited, or layer was accidentally renamed during template maintenance</td>
-          <td>Render completes. Output shows blank vessel surface — no label visible.</td>
+          <td>Render completes. Output shows blank vessel surface: no label visible.</td>
           <td>Template naming lock convention: reserved layer names documented and protected via AE script that warns on save if reserved names are absent.</td>
         </tr>
         <tr>
@@ -855,7 +855,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
         <tr>
           <td>Depth displacement missing</td>
           <td>Displacer Pro not installed or not licensed on render node</td>
-          <td>Render completes. Label appears flat on vessel — no surface curvature or foreshortening. Often not immediately obvious.</td>
+          <td>Render completes. Label appears flat on vessel: no surface curvature or foreshortening. Often not immediately obvious.</td>
           <td>Plugin license and installation verified on render node environment. Visual QA checklist includes depth displacement verification pass.</td>
         </tr>
         <tr>
@@ -880,8 +880,8 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
   <!-- ── FOOTER ── -->
   <footer class="cs-footer">
-    <p>Studio David Preli &mdash; <a href="https://davidpreli.com">davidpreli.com</a></p>
-    <p><a href="./milkpep-case-study.html">&larr; MilkPEP Dynamic Videos case study</a> &mdash; Client: MilkPEP / USDA &mdash; Agency: GALE Partners &mdash; 2026</p>
+    <p>Studio David Preli &middot; <a href="https://davidpreli.com">davidpreli.com</a></p>
+    <p><a href="./milkpep-case-study.html">&larr; MilkPEP Dynamic Videos case study</a> &middot; Client: MilkPEP / USDA &middot; Agency: GALE Partners &middot; 2026</p>
   </footer>
 
 </div>
