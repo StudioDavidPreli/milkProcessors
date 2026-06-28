@@ -370,7 +370,7 @@ code {
     <div class="sec-label"><span class="sec-num">01</span>System overview</div>
     <h2>Three layers. One contract.</h2>
 
-    <p>The system is composed of three distinct layers that communicate exclusively through a shared data schema. The web front end collects user input. NexRender carries that input into After Effects. After Effects evaluates it at render time. No layer has any direct knowledge of the others — they share only a vocabulary of keyword strings.</p>
+    <p>The system is composed of three distinct layers that communicate exclusively through a shared data schema. The web front end collects user input. NexRender carries that input into After Effects. After Effects evaluates it at render time. No layer has any direct knowledge of the others. They share only a vocabulary of keyword strings.</p>
 
     <table class="data-table">
       <thead>
@@ -465,7 +465,7 @@ code {
 
     <div class="callout">
       <div class="callout-label">Critical</div>
-      <p>NexRender resolves the render target by composition name only. A composition with a corrected or abbreviated name — <code>Milk_Export</code>, <code>MILKEXPORT</code>, <code>export</code> — will not be found. The render job will fail silently or target the wrong composition with no error output.</p>
+      <p>NexRender resolves the render target by composition name only. A composition with a corrected or abbreviated name (<code>Milk_Export</code>, <code>MILKEXPORT</code>, <code>export</code>) will not be found. The render job will fail silently or target the wrong composition with no error output.</p>
     </div>
 
     <h3>2.2 — The MILK_LABEL layer</h3>
@@ -525,7 +525,7 @@ code {
 ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <span class="cv">0</span>;
     </div>
 
-    <p>This pattern is intentionally minimal. The text layer contains the raw uppercase keyword string with no whitespace and no formatting. Any deviation — a trailing space, a capitalisation difference — causes the expression to evaluate to <code>0</code> and the precomp to be invisible in the render.</p>
+    <p>This pattern is intentionally minimal. The text layer contains the raw uppercase keyword string with no whitespace and no formatting. Any deviation (a trailing space, a capitalisation difference) causes the expression to evaluate to <code>0</code> and the precomp to be invisible in the render.</p>
 
     <h3>2.5 — Asset naming constraints</h3>
 
@@ -533,8 +533,8 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <ul class="cs-list">
       <li>Source footage files: maximum 20 characters including extension</li>
-      <li>Depth map files: prefixed <code>dm_</code>, short descriptor, extension — e.g. <code>dm_jug_hg.exr</code></li>
-      <li>Precomp assets: prefixed with a two-letter vessel code — e.g. <code>jg_white_hg</code> (jug, white, half-gallon)</li>
+      <li>Depth map files: prefixed <code>dm_</code>, short descriptor, extension, e.g. <code>dm_jug_hg.exr</code></li>
+      <li>Precomp assets: prefixed with a two-letter vessel code, e.g. <code>jg_white_hg</code> (jug, white, half-gallon)</li>
       <li>No spaces in any asset name; underscores only</li>
       <li>No special characters, accented characters, or Unicode in asset paths</li>
     </ul>
@@ -596,7 +596,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <ul class="cs-list">
       <li>All keywords are uppercase (CAPS LOCK). This matches the naming convention of the layer names and composition names they interact with.</li>
-      <li>Multi-word values use hyphens only — no spaces, no underscores. Hyphens are retained in uppercase: <code>HALF-GALLON</code>, <code>LACTOSE-FREE</code></li>
+      <li>Multi-word values use hyphens only: no spaces, no underscores. Hyphens are retained in uppercase: <code>HALF-GALLON</code>, <code>LACTOSE-FREE</code></li>
       <li>The keyword string must match the After Effects expression comparison character-for-character, including hyphenation and case</li>
       <li>New keyword values cannot be added without a corresponding precomp layer and expression branch in all affected templates</li>
     </ul>
@@ -608,7 +608,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
     <div class="sec-label"><span class="sec-num">04</span>NexRender integration</div>
     <h2>What NexRender does and does not do.</h2>
 
-    <p>NexRender is a headless After Effects render automation system. It accepts a job manifest — a JSON object — opens the specified AE project on a render node, makes the modifications described in the manifest, and executes the render queue. It has no awareness of the content it is rendering. It reads strings and writes them to layers.</p>
+    <p>NexRender is a headless After Effects render automation system. It accepts a job manifest (a JSON object), opens the specified AE project on a render node, makes the modifications described in the manifest, and executes the render queue. It has no awareness of the content it is rendering. It reads strings and writes them to layers.</p>
 
     <h3>4.1 — Job manifest structure</h3>
 
@@ -692,7 +692,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <h3>4.3 — Pre-render vs. render-time execution</h3>
 
-    <p>The <code>setText</code> actions are <em>pre-render</em> actions — they execute before the AE render queue is opened. This is critical: AE evaluates expressions at render time against the layer state in the project file. If text layer values are written after the render begins, expressions have already been evaluated and the variable switch has no effect. All variable injection must complete in the pre-render phase.</p>
+    <p>The <code>setText</code> actions are <em>pre-render</em> actions. They execute before the AE render queue is opened. This is critical: AE evaluates expressions at render time against the layer state in the project file. If text layer values are written after the render begins, expressions have already been evaluated and the variable switch has no effect. All variable injection must complete in the pre-render phase.</p>
 
     <p>The label asset replacement via <code>layerName</code> matching also occurs in the pre-render phase. NexRender locates the layer by name, downloads the asset from the specified URL, and replaces the source footage reference before AE opens the composition.</p>
 
@@ -703,7 +703,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
     <div class="sec-label"><span class="sec-num">05</span>Depth compositing pipeline</div>
     <h2>The label sits in the scene, not on it.</h2>
 
-    <p>The footage was shot with vessel placement and lighting engineered for a subsequent depth-scanning pass. The depth pipeline produces a per-frame displacement map that allows an incoming label asset to be composited with accurate perspective foreshortening, surface curvature, and lighting response — without any manual tracking or matchmoving.</p>
+    <p>The footage was shot with vessel placement and lighting engineered for a subsequent depth-scanning pass. The depth pipeline produces a per-frame displacement map that allows an incoming label asset to be composited with accurate perspective foreshortening, surface curvature, and lighting response, without any manual tracking or matchmoving.</p>
 
     <h3>5.1 — Depth map generation</h3>
 
@@ -737,7 +737,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <h3>5.2 — Safe zone</h3>
 
-    <p>Each vessel precomp defines a label safe zone — a rectangular region on the vessel surface within which any processor's label will be legible and correctly composited regardless of label artwork dimensions. The safe zone was defined during the shoot by marking the vessel with reference tape and is encoded in the vessel null's transform values in the template.</p>
+    <p>Each vessel precomp defines a label safe zone: a rectangular region on the vessel surface within which any processor's label will be legible and correctly composited regardless of label artwork dimensions. The safe zone was defined during the shoot by marking the vessel with reference tape and is encoded in the vessel null's transform values in the template.</p>
 
     <p>The MILK_LABEL layer is scaled to fill the safe zone by default. Labels with non-standard aspect ratios are letterboxed within the safe zone; the letterbox background matches the vessel colour inferred from the cap colour variable.</p>
 
@@ -747,7 +747,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <div class="callout">
       <div class="callout-label">Constraint</div>
-      <p>The lighting simulation is an approximation. Labels with strong internal contrast — e.g. a bright white panel on a dark background — may show visible seaming at the label boundary under certain lighting conditions. The safe zone was positioned during the shoot to keep the vessel in the most favourable lighting angle for all cap colour variants.</p>
+      <p>The lighting simulation is an approximation. Labels with strong internal contrast, e.g. a bright white panel on a dark background, may show visible seaming at the label boundary under certain lighting conditions. The safe zone was positioned during the shoot to keep the vessel in the most favourable lighting angle for all cap colour variants.</p>
     </div>
 
   </section>
@@ -757,7 +757,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
     <div class="sec-label"><span class="sec-num">06</span>Combinatorics</div>
     <h2>Where 12,460 comes from.</h2>
 
-    <p>The 12,460 figure is the total number of distinct renders the system can produce across all recipes, vessel configurations, milk varieties, cap colours, and output formats. It is not a count of renders produced — it is the scope of the system. Each combination is a valid, distinct After Effects render with a unique precomp configuration, label placement, and expression state. All recipes produce a 9:16 output; some also produce 4:5 and 1:1 outputs.</p>
+    <p>The 12,460 figure is the total number of distinct renders the system can produce across all recipes, vessel configurations, milk varieties, cap colours, and output formats. It is not a count of renders produced. It is the scope of the system. Each combination is a valid, distinct After Effects render with a unique precomp configuration, label placement, and expression state. All recipes produce a 9:16 output; some also produce 4:5 and 1:1 outputs.</p>
 
     <div class="callout-info">
       <p>Not all combinations are available for all recipes. A recipe that does not use chocolate milk does not expose the chocolate variety option. The totals below reflect the maximum available per-variable count; actual per-recipe combination counts are lower and vary by recipe.</p>
@@ -810,7 +810,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
       </tbody>
     </table>
 
-    <p>The complexity implied by this number lives entirely in the template build. Every cap colour that needed to work required a precomp layer, a colour-matched asset, and an expression branch. Every carton size that differed from the default required a size-specific composition with its own depth-adjusted label transform and a corresponding safe zone calibration. Every milk variety required a footage variant — white milk and chocolate milk have visibly different liquid colour — with a separate depth-composited label zone.</p>
+    <p>The complexity implied by this number lives entirely in the template build. Every cap colour that needed to work required a precomp layer, a colour-matched asset, and an expression branch. Every carton size that differed from the default required a size-specific composition with its own depth-adjusted label transform and a corresponding safe zone calibration. Every milk variety required a footage variant (white milk and chocolate milk have visibly different liquid colour) with a separate depth-composited label zone.</p>
 
     <p>At render time, NexRender writes four keyword strings and replaces one layer. The 12,460 combinations are resolved before the render job is ever queued.</p>
 
@@ -821,7 +821,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
     <div class="sec-label"><span class="sec-num">07</span>Known failure modes</div>
     <h2>What breaks and why.</h2>
 
-    <p>The following failure modes were identified during alpha and beta testing. Most are silent — NexRender does not surface AE expression errors in its job logs, and a render that completes with the wrong variable state is indistinguishable from a correct render at the API level.</p>
+    <p>The following failure modes were identified during alpha and beta testing. Most are silent. NexRender does not surface AE expression errors in its job logs, and a render that completes with the wrong variable state is indistinguishable from a correct render at the API level.</p>
 
     <table class="data-table failure-table">
       <thead>

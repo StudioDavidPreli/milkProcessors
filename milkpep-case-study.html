@@ -468,7 +468,7 @@ a:hover { text-decoration: underline; }
   <header class="cs-header">
     <div class="cs-eyebrow">Case Study &mdash; Studio David Preli &mdash; 2026</div>
     <h1 class="cs-title">MilkPEP Dynamic Videos</h1>
-    <p class="cs-subtitle">A self-service video personalisation tool for independent milk processors &mdash; built on After Effects, NexRender, and a custom data schema</p>
+    <p class="cs-subtitle">A self-service video personalisation tool for independent milk processors, built on After Effects, NexRender, and a custom data schema</p>
     <div class="cs-meta">
       <div class="cs-meta-item">
         <span class="cs-meta-label">Client</span>
@@ -519,7 +519,7 @@ a:hover { text-decoration: underline; }
       <p>The constraint was not creative. It was systemic. The tool had to make professional-grade personalisation available to people who had never used After Effects and never would.</p>
     </div>
 
-    <p>The brief was to build a self-service customisation tool: a web interface through which any processor could select a recipe video from a curated library, specify their brand variables — label, vessel type, cap colour, milk variety — and receive a finished, broadcast-quality video asset with their product composited into the original footage.</p>
+    <p>The brief was to build a self-service customisation tool: a web interface through which any processor could select a recipe video from a curated library, specify their brand variables (label, vessel type, cap colour, milk variety) and receive a finished, broadcast-quality video asset with their product composited into the original footage.</p>
   </section>
 
   <!-- ── PRODUCTION ── -->
@@ -529,7 +529,7 @@ a:hover { text-decoration: underline; }
 
     <p>The recipe videos were shot on a professional production with a single constraint that governed every decision: the milk vessel had to be placed and lit with enough precision that any processor&rsquo;s label could be composited into the scene later, regardless of their product&rsquo;s geometry.</p>
 
-    <p>This required maintaining exact continuity of vessel placement and orientation across every recipe — the same physical position in frame, the same lighting angle on the vessel surface, the same camera focal distance. What looked like a simple food video to the viewer was, at the production level, a carefully controlled reference for the depth-scanning compositing system that would follow.</p>
+    <p>This required maintaining exact continuity of vessel placement and orientation across every recipe: the same physical position in frame, the same lighting angle on the vessel surface, the same camera focal distance. What looked like a simple food video to the viewer was, at the production level, a carefully controlled reference for the depth-scanning compositing system that would follow.</p>
 
     <div class="gif-grid">
       <div class="gif-wrap">
@@ -562,7 +562,7 @@ a:hover { text-decoration: underline; }
     <div class="sec-label"><span class="sec-num">03</span>Template architecture</div>
     <h2>One template per recipe. Every template shares the same contract.</h2>
 
-    <p>Each recipe in the library has a corresponding After Effects project file built to a strict internal specification. The specification is not documentation written after the fact. It is the architecture. Every template was built to it from the start, because the rendering system has no tolerance for deviation — NexRender does not interpret, it reads.</p>
+    <p>Each recipe in the library has a corresponding After Effects project file built to a strict internal specification. The specification is not documentation written after the fact. It is the architecture. Every template was built to it from the start, because the rendering system has no tolerance for deviation: NexRender does not interpret, it reads.</p>
 
     <div class="workflow">
 
@@ -577,7 +577,7 @@ a:hover { text-decoration: underline; }
             <span class="tool-pill green">After Effects</span>
             <span class="tool-pill green">NexRender</span>
           </div>
-          <p>Each template contains exactly two compositions whose names are fixed. NexRender locates the render target by composition name — not by path, not by index. Renaming either composition breaks the render job silently. The composition names are specified in the schema and treated as reserved strings throughout the project lifecycle.</p>
+          <p>Each template contains exactly two compositions whose names are fixed. NexRender locates the render target by composition name, not by path, not by index. Renaming either composition breaks the render job silently. The composition names are specified in the schema and treated as reserved strings throughout the project lifecycle.</p>
         </div>
       </div>
 
@@ -593,7 +593,7 @@ a:hover { text-decoration: underline; }
             <span class="tool-pill amber">Depth Scanner Plugin</span>
           </div>
           <p>Every template contains a layer named <em>MILK_LABEL</em>. This layer is blank in the source file. When a render job is triggered, NexRender replaces this layer with the user-uploaded label asset via the job manifest. The name <em>MILK_LABEL</em> is the only identifier the system uses to find the target. It cannot be abbreviated, translated, or reformatted. It is the layer name exactly as written.</p>
-          <p>The layer is pre-positioned and pre-parented to the vessel in the composition, so the incoming label asset inherits the correct transform data — position, rotation, scale, and the depth-derived distortion — without any additional instruction. The user uploads a flat image. The template does the placement work.</p>
+          <p>The layer is pre-positioned and pre-parented to the vessel in the composition, so the incoming label asset inherits the correct transform data (position, rotation, scale, and the depth-derived distortion) without any additional instruction. The user uploads a flat image. The template does the placement work.</p>
         </div>
       </div>
 
@@ -607,7 +607,7 @@ a:hover { text-decoration: underline; }
           <div class="tools">
             <span class="tool-pill green">After Effects Expressions</span>
           </div>
-          <p>Milk variety — WHOLE, STRAWBERRY, CHOCOLATE, and so on — determines which precomposition is visible in the final render. This is controlled by three text layers in the export composition. Each text layer holds a keyword value. Expressions on the precomposition layers read these keyword values and evaluate them against a lookup to set layer opacity. The text layer content is the variable. The expression is the conditional logic. NexRender writes to the text layers; After Effects evaluates the result at render time.</p>
+          <p>Milk variety (WHOLE, STRAWBERRY, CHOCOLATE, and so on) determines which precomposition is visible in the final render. This is controlled by three text layers in the export composition. Each text layer holds a keyword value. Expressions on the precomposition layers read these keyword values and evaluate them against a lookup to set layer opacity. The text layer content is the variable. The expression is the conditional logic. NexRender writes to the text layers; After Effects evaluates the result at render time.</p>
           <p>Recipes that do not use chocolate milk do not include the chocolate precomposition at all. Each recipe has a specific composition set corresponding to the vessel variants available for that product. The schema specifies which compositions are present and what keyword values each one responds to.</p>
 
           <div class="gif-grid">
@@ -633,7 +633,7 @@ a:hover { text-decoration: underline; }
           <div class="tools">
             <span class="tool-pill green">NexRender</span>
           </div>
-          <p>Long asset names cause decompression failures in the NexRender pipeline. This is not a documented limit — it was found in testing. All source assets in the templates use short, unambiguous names. The depth map files, the precomposition source footage, and the label placeholder all follow a naming convention defined in the schema. A file named correctly in the wrong folder is as broken as a file named incorrectly anywhere.</p>
+          <p>Long asset names cause decompression failures in the NexRender pipeline. This is not a documented limit. It was found in testing. All source assets in the templates use short, unambiguous names. The depth map files, the precomposition source footage, and the label placeholder all follow a naming convention defined in the schema. A file named correctly in the wrong folder is as broken as a file named incorrectly anywhere.</p>
         </div>
       </div>
 
@@ -689,7 +689,7 @@ a:hover { text-decoration: underline; }
       </tbody>
     </table>
 
-    <p>Every keyword in the schema has a single canonical spelling. The frontend form, the backend API, and the After Effects expression all use the same string. There is no translation layer. A discrepancy anywhere in that chain produces a render where the variable is ignored — which means a finished video with the wrong product in frame, or no product at all. The schema is what makes silent failure impossible.</p>
+    <p>Every keyword in the schema has a single canonical spelling. The frontend form, the backend API, and the After Effects expression all use the same string. There is no translation layer. A discrepancy anywhere in that chain produces a render where the variable is ignored, which means a finished video with the wrong product in frame, or no product at all. The schema is what makes silent failure impossible.</p>
 
     <div class="pullquote">
       <p>NexRender does not know what a milk processor is. It knows how to write a value to a text layer in an After Effects composition and trigger a render. The schema is everything between those two facts.</p>
@@ -767,7 +767,7 @@ a:hover { text-decoration: underline; }
             <span class="tool-pill purple">Django API</span>
             <span class="tool-pill green">NexRender</span>
           </div>
-          <p>The customisation form presents only the variables relevant to the selected recipe — vessel type options that exist in the template, milk varieties the template supports, cap colours valid for the chosen vessel. Selecting a combination updates a live preview. The label upload field accepts the processor&rsquo;s brand artwork; the system handles the compositing.</p>
+          <p>The customisation form presents only the variables relevant to the selected recipe: vessel type options that exist in the template, milk varieties the template supports, cap colours valid for the chosen vessel. Selecting a combination updates a live preview. The label upload field accepts the processor&rsquo;s brand artwork; the system handles the compositing.</p>
           <p>On submission, the form values are validated against the schema, a NexRender job manifest is constructed, and the render job is queued. The processor receives a download link when the render is complete.</p>
 
           <div class="gif-wrap" style="margin: 20px 0;">
@@ -786,14 +786,14 @@ a:hover { text-decoration: underline; }
     <div class="sec-label"><span class="sec-num">06</span>Scale</div>
     <h2>The complexity lives in the template, not in the render.</h2>
 
-    <p>12,460 is not a count of videos produced. It is the number of valid output combinations the system supports across all recipes, vessel types, vessel sizes, milk varieties, and cap colours. Each combination represents a distinct After Effects render — a unique precomp configuration, label placement, and expression state.</p>
+    <p>12,460 is not a count of videos produced. It is the number of valid output combinations the system supports across all recipes, vessel types, vessel sizes, milk varieties, and cap colours. Each combination represents a distinct After Effects render: a unique precomp configuration, label placement, and expression state.</p>
 
     <div class="total-callout">
       <div class="total-callout-num">12,460</div>
       <div class="total-callout-desc">possible unique video outputs — each a distinct combination of recipe, vessel type, vessel size, milk variety, and cap colour</div>
     </div>
 
-    <p>That number is the product of decisions made during the template build. Every cap colour that needed to work required a corresponding precomp layer and an expression branch. Every vessel size that differed from the default required a size-specific composition with its own label transform. Every milk variety required a footage variant with its own depth-composited label zone. None of this complexity exists at the render-time level — NexRender writes a keyword to a text layer and starts the queue. The complexity was resolved entirely in the template architecture.</p>
+    <p>That number is the product of decisions made during the template build. Every cap colour that needed to work required a corresponding precomp layer and an expression branch. Every vessel size that differed from the default required a size-specific composition with its own label transform. Every milk variety required a footage variant with its own depth-composited label zone. None of this complexity exists at the render-time level: NexRender writes a keyword to a text layer and starts the queue. The complexity was resolved entirely in the template architecture.</p>
 
     <div class="combo-grid">
       <div class="combo-cell">
@@ -828,7 +828,7 @@ a:hover { text-decoration: underline; }
       </div>
     </div>
 
-    <p>An internal study that accompanied the project noted that what might have taken a software engineer a day or more to code was produced by an in-house motion designer using AI-assisted scripting. That is accurate for the variable-passing code on the backend. The After Effects work — building 28-plus templates that are each structurally identical in contract but visually unique in content, all to a specification precise enough that a web form can control them at render time — was done by hand.</p>
+    <p>An internal study that accompanied the project noted that what might have taken a software engineer a day or more to code was produced by an in-house motion designer using AI-assisted scripting. That is accurate for the variable-passing code on the backend. The After Effects work (building 28-plus templates that are each structurally identical in contract but visually unique in content, all to a specification precise enough that a web form can control them at render time) was done by hand.</p>
 
   </section>
 
@@ -837,7 +837,7 @@ a:hover { text-decoration: underline; }
     <div class="sec-label"><span class="sec-num">07</span>Output</div>
     <h2>A finished asset. No designer required.</h2>
 
-    <p>The end result is a broadcast-quality video with the processor&rsquo;s product composited into the original recipe footage — the label tracked to the vessel surface, lit by the same practical light that lit the shoot, sitting in the same depth plane as the physical vessel that was in the frame.</p>
+    <p>The end result is a broadcast-quality video with the processor&rsquo;s product composited into the original recipe footage: the label tracked to the vessel surface, lit by the same practical light that lit the shoot, sitting in the same depth plane as the physical vessel that was in the frame.</p>
 
     <div class="output-grid">
 
