@@ -396,13 +396,13 @@ code {
     </table>
 
     <div class="callout-info">
-      <p>The templates were built for After Effects 2025 and are not backwards-compatible with earlier versions. The expression engine behaviour and certain effect parameters differ across versions in ways that affect the depth compositing stack.</p>
+      <p>The templates were built for After Effects 2025 and are not backwards-compatible with earlier versions. The expression engine behavior and certain effect parameters differ across versions in ways that affect the depth compositing stack.</p>
     </div>
 
     <h3>Data flow</h3>
 
     <div class="code-block">
-<span class="cm">// Simplified data flow — all values are schema-defined keyword strings</span>
+<span class="cm">// Simplified data flow: all values are schema-defined keyword strings</span>
 
 <span class="ck">User form</span>
   vessel_type  = <span class="cs">"JUG"</span>
@@ -502,7 +502,7 @@ code {
         <tr>
           <td><code>CAP_VAR</code></td>
           <td>NexRender setText action</td>
-          <td>Opacity expressions on cap-colour layers within active vessel precomp</td>
+          <td>Opacity expressions on cap-color layers within active vessel precomp</td>
         </tr>
         <tr>
           <td><code>SIZE_VAR</code></td>
@@ -517,7 +517,7 @@ code {
     <p>All visibility control uses the same expression pattern. An expression on a precomp's Opacity property reads the source text of the relevant variable layer and evaluates it against the keyword value associated with that precomp. The expression returns <code>100</code> if the strings match, <code>0</code> if they do not.</p>
 
     <div class="code-block">
-<span class="cm">// Opacity expression — applied to each variety precomp layer
+<span class="cm">// Opacity expression: applied to each variety precomp layer
 // Replace "CHOCOLATE" with the keyword for this precomp
 // Replace "VARIETY_VAR" with the controlling text layer name</span>
 
@@ -525,7 +525,7 @@ code {
 ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <span class="cv">0</span>;
     </div>
 
-    <p>This pattern is intentionally minimal. The text layer contains the raw uppercase keyword string with no whitespace and no formatting. Any deviation (a trailing space, a capitalisation difference) causes the expression to evaluate to <code>0</code> and the precomp to be invisible in the render.</p>
+    <p>This pattern is intentionally minimal. The text layer contains the raw uppercase keyword string with no whitespace and no formatting. Any deviation (a trailing space, a capitalization difference) causes the expression to evaluate to <code>0</code> and the precomp to be invisible in the render.</p>
 
     <h3>2.5 &middot; Asset naming constraints</h3>
 
@@ -572,10 +572,10 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
           <td>Determines active vessel precomp hierarchy. Each vessel type has its own depth-scanned label placement null.</td>
         </tr>
         <tr>
-          <td>Cap colour</td>
+          <td>Cap color</td>
           <td><code>CAP_VAR</code></td>
           <td><code>RED</code> / <code>BLUE</code> / <code>WHITE</code> / <code>GREEN</code> / <code>YELLOW</code> / <code>ORANGE</code> / <code>PURPLE</code> / <code>BLACK</code> / <code>BROWN</code> / <code>PINK</code></td>
-          <td>Cap layer visibility is controlled by expression within the active vessel precomp. Not all cap colours are available for all vessel types.</td>
+          <td>Cap layer visibility is controlled by expression within the active vessel precomp. Not all cap colors are available for all vessel types.</td>
         </tr>
         <tr>
           <td>Carton size</td>
@@ -587,7 +587,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
           <td>Label asset</td>
           <td><code>MILK_LABEL</code></td>
           <td>User-uploaded PNG or JPG. No keyword: the layer is replaced by NexRender directly.</td>
-          <td>Accepted dimensions: minimum 500&times;500 px. Transparent background supported. Labels with transparency composite against vessel surface colour.</td>
+          <td>Accepted dimensions: minimum 500&times;500 px. Transparent background supported. Labels with transparency composite against vessel surface color.</td>
         </tr>
       </tbody>
     </table>
@@ -719,7 +719,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
         </tr>
         <tr>
           <td>Depth refinement</td>
-          <td>Depth Scanner Plugin: analyses surface reflections on vessel to sharpen depth discontinuities at label zone boundary</td>
+          <td>Depth Scanner Plugin: analyzes surface reflections on vessel to sharpen depth discontinuities at label zone boundary</td>
           <td>Refined EXR sequence: vessel surface isolated from background</td>
         </tr>
         <tr>
@@ -739,7 +739,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <p>Each vessel precomp defines a label safe zone: a rectangular region on the vessel surface within which any processor's label will be legible and correctly composited regardless of label artwork dimensions. The safe zone was defined during the shoot by marking the vessel with reference tape and is encoded in the vessel null's transform values in the template.</p>
 
-    <p>The MILK_LABEL layer is scaled to fill the safe zone by default. Labels with non-standard aspect ratios are letterboxed within the safe zone; the letterbox background matches the vessel colour inferred from the cap colour variable.</p>
+    <p>The MILK_LABEL layer is scaled to fill the safe zone by default. Labels with non-standard aspect ratios are letterboxed within the safe zone; the letterbox background matches the vessel color inferred from the cap color variable.</p>
 
     <h3>5.3 &middot; Lighting response</h3>
 
@@ -747,7 +747,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
 
     <div class="callout">
       <div class="callout-label">Constraint</div>
-      <p>The lighting simulation is an approximation. Labels with strong internal contrast, e.g. a bright white panel on a dark background, may show visible seaming at the label boundary under certain lighting conditions. The safe zone was positioned during the shoot to keep the vessel in the most favourable lighting angle for all cap colour variants.</p>
+      <p>The lighting simulation is an approximation. Labels with strong internal contrast, e.g. a bright white panel on a dark background, may show visible seaming at the label boundary under certain lighting conditions. The safe zone was positioned during the shoot to keep the vessel in the most favorable lighting angle for all cap color variants.</p>
     </div>
 
   </section>
@@ -757,7 +757,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
     <div class="sec-label"><span class="sec-num">06</span>Combinatorics</div>
     <h2>Where 12,460 comes from.</h2>
 
-    <p>The 12,460 figure is the total number of distinct renders the system can produce across all recipes, vessel configurations, milk varieties, cap colours, and output formats. It is not a count of renders produced. It is the scope of the system. Each combination is a valid, distinct After Effects render with a unique precomp configuration, label placement, and expression state. All recipes produce a 9:16 output; some also produce 4:5 and 1:1 outputs.</p>
+    <p>The 12,460 figure is the total number of distinct renders the system can produce across all recipes, vessel configurations, milk varieties, cap colors, and output formats. It is the scope of the system, not a count of renders produced. Each combination is a valid, distinct After Effects render with a unique precomp configuration, label placement, and expression state. All recipes produce a 9:16 output; some also produce 4:5 and 1:1 outputs.</p>
 
     <div class="callout-info">
       <p>Not all combinations are available for all recipes. A recipe that does not use chocolate milk does not expose the chocolate variety option. The totals below reflect the maximum available per-variable count; actual per-recipe combination counts are lower and vary by recipe.</p>
@@ -793,9 +793,9 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
           <td>Whole, strawberry, chocolate, skim, 2%, lactose-free: recipe availability varies</td>
         </tr>
         <tr>
-          <td>Cap colours</td>
+          <td>Cap colors</td>
           <td>10</td>
-          <td>Per vessel type; not all colours available for all vessels</td>
+          <td>Per vessel type; not all colors available for all vessels</td>
         </tr>
         <tr>
           <td>Output formats</td>
@@ -810,7 +810,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
       </tbody>
     </table>
 
-    <p>The complexity implied by this number lives entirely in the template build. Every cap colour that needed to work required a precomp layer, a colour-matched asset, and an expression branch. Every carton size that differed from the default required a size-specific composition with its own depth-adjusted label transform and a corresponding safe zone calibration. Every milk variety required a footage variant (white milk and chocolate milk have visibly different liquid colour) with a separate depth-composited label zone.</p>
+    <p>The complexity implied by this number lives entirely in the template build. A working cap color means a precomp layer, a color-matched asset, and an expression branch; a non-default carton size means a size-specific composition with its own depth-adjusted label transform and safe zone calibration; a milk variety means a footage variant (white milk and chocolate milk have visibly different liquid color) with a separate depth-composited label zone.</p>
 
     <p>At render time, NexRender writes four keyword strings and replaces one layer. The 12,460 combinations are resolved before the render job is ever queued.</p>
 
@@ -860,7 +860,7 @@ ctrl === <span class="cs">"CHOCOLATE"</span> ? <span class="cv">100</span> : <sp
         </tr>
         <tr>
           <td>Expression evaluates to 0 on all precomps</td>
-          <td>Text layer contains trailing whitespace from API serialisation</td>
+          <td>Text layer contains trailing whitespace from API serialization</td>
           <td>All variety precomps hidden. Render completes with transparent vessel area.</td>
           <td>API trims all keyword values before manifest construction. Schema defines no leading or trailing whitespace as valid.</td>
         </tr>
