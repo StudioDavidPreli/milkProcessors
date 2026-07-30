@@ -468,7 +468,7 @@ a:hover { text-decoration: underline; }
   <header class="cs-header">
     <div class="cs-eyebrow">Case Study &middot; Studio David Preli &middot; 2026</div>
     <h1 class="cs-title">MilkPEP Dynamic Videos</h1>
-    <p class="cs-subtitle">A self-service video personalisation tool for independent milk processors, built on After Effects, NexRender, and a custom data schema</p>
+    <p class="cs-subtitle">A self-service video personalization tool for independent milk processors, built on After Effects, NexRender, and a custom data schema</p>
     <div class="cs-meta">
       <div class="cs-meta-item">
         <span class="cs-meta-label">Client</span>
@@ -498,8 +498,8 @@ a:hover { text-decoration: underline; }
     <div class="sec-label"><span class="sec-num">00</span>The tool</div>
 
     <div class="gif-wrap">
-      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/toolUse.gif" alt="Screen recording — tool walkthrough: gallery, detail, customise, download" loading="lazy">
-      <div class="gif-caption">Tool walkthrough: gallery &rarr; detail &rarr; customise &rarr; download</div>
+      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/toolUse.gif" alt="Screen recording: tool walkthrough, gallery, detail, customize, download" loading="lazy">
+      <div class="gif-caption">Tool walkthrough: gallery &rarr; detail &rarr; customize &rarr; download</div>
     </div>
 
   </section>
@@ -516,10 +516,10 @@ a:hover { text-decoration: underline; }
     <p>A generic asset featuring a white milk jug does not serve a processor whose brand is a yellow carton with a red cap. The asset has to carry their identity to be usable. And producing individual custom assets for thousands of processors by hand is not a production model.</p>
 
     <div class="pullquote">
-      <p>The constraint was not creative. It was systemic. The tool had to make professional-grade personalisation available to people who had never used After Effects and never would.</p>
+      <p>The constraint was systemic, not creative. The tool had to make professional-grade personalization available to people who had never used After Effects and never would.</p>
     </div>
 
-    <p>The brief was to build a self-service customisation tool: a web interface through which any processor could select a recipe video from a curated library, specify their brand variables (label, vessel type, cap colour, milk variety) and receive a finished, broadcast-quality video asset with their product composited into the original footage.</p>
+    <p>The brief was to build a self-service customization tool: a web interface through which any processor could select a recipe video from a curated library, specify their brand variables (label, vessel type, cap color, milk variety) and receive a finished, broadcast-quality video asset with their product composited into the original footage.</p>
   </section>
 
   <!-- ── PRODUCTION ── -->
@@ -533,20 +533,20 @@ a:hover { text-decoration: underline; }
 
     <div class="gif-grid">
       <div class="gif-wrap">
-        <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/bts0.jpg" alt="Behind the scenes production still — vessel placement on set" loading="lazy">
+        <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/bts0.jpg" alt="Behind the scenes production still: vessel placement on set" loading="lazy">
         <div class="gif-caption">Production: vessel placement on set</div>
       </div>
       <div class="gif-wrap">
-        <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/bts1.jpg" alt="Behind the scenes production still — lighting setup" loading="lazy">
+        <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/bts1.jpg" alt="Behind the scenes production still: lighting setup" loading="lazy">
         <div class="gif-caption">Production: lighting and focus continuity</div>
       </div>
     </div>
 
     <div class="gif-wrap" style="margin: 20px 0;">
-      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/depth.gif" alt="Depth scan pass — AI-generated depth map used for label compositing" loading="lazy">
+      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/depth.gif" alt="Depth scan pass: AI-generated depth map used for label compositing" loading="lazy">
       <div class="gif-caption">Depth pass: per-frame depth map driving label placement</div>
     </div>
-    <p>Footage was enhanced using a depth-scanning workflow to generate per-frame depth maps. Using a Depth Prediction Transformer, reflections on the vessel surface were analysed to produce an accurate spatial map of the scene. An AI alignment algorithm then used this map to place the user&rsquo;s uploaded label into the designated safe zone with correct perspective, foreshortening, and lighting response. The label does not sit on the footage. It sits in it.</p>
+    <p>Footage was enhanced using a depth-scanning workflow to generate per-frame depth maps. Using a Depth Prediction Transformer, reflections on the vessel surface were analyzed to produce an accurate spatial map of the scene. An AI alignment algorithm then used this map to place the user&rsquo;s uploaded label into the designated safe zone with correct perspective, foreshortening, and lighting response. The label does not sit on the footage. It sits in the footage.</p>
 
     <div class="tools">
       <span class="tool-pill amber">Depth Scanner Plugin</span>
@@ -562,7 +562,7 @@ a:hover { text-decoration: underline; }
     <div class="sec-label"><span class="sec-num">03</span>Template architecture</div>
     <h2>One template per recipe. Every template shares the same contract.</h2>
 
-    <p>Each recipe in the library has a corresponding After Effects project file built to a strict internal specification. The specification is not documentation written after the fact. It is the architecture. Every template was built to it from the start, because the rendering system has no tolerance for deviation: NexRender does not interpret, it reads.</p>
+    <p>Each recipe in the library has a corresponding After Effects project file built to a strict internal specification. The specification is the architecture, not documentation written after the fact. Every template was built to it from the start, because the rendering system has no tolerance for deviation: NexRender does not interpret, it reads.</p>
 
     <div class="workflow">
 
@@ -592,7 +592,7 @@ a:hover { text-decoration: underline; }
             <span class="tool-pill green">After Effects</span>
             <span class="tool-pill amber">Depth Scanner Plugin</span>
           </div>
-          <p>Every template contains a layer named <em>MILK_LABEL</em>. This layer is blank in the source file. When a render job is triggered, NexRender replaces this layer with the user-uploaded label asset via the job manifest. The name <em>MILK_LABEL</em> is the only identifier the system uses to find the target. It cannot be abbreviated, translated, or reformatted. It is the layer name exactly as written.</p>
+          <p>Every template contains a layer named <em>MILK_LABEL</em>. This layer is blank in the source file. When a render job is triggered, NexRender replaces this layer with the user-uploaded label asset via the job manifest. The name <em>MILK_LABEL</em> is the only identifier the system uses to find the target. It cannot be abbreviated, translated, or reformatted: it is the layer name exactly as written.</p>
           <p>The layer is pre-positioned and pre-parented to the vessel in the composition, so the incoming label asset inherits the correct transform data (position, rotation, scale, and the depth-derived distortion) without any additional instruction. The user uploads a flat image. The template does the placement work.</p>
         </div>
       </div>
@@ -633,7 +633,7 @@ a:hover { text-decoration: underline; }
           <div class="tools">
             <span class="tool-pill green">NexRender</span>
           </div>
-          <p>Long asset names cause decompression failures in the NexRender pipeline. This is not a documented limit. It was found in testing. All source assets in the templates use short, unambiguous names. The depth map files, the precomposition source footage, and the label placeholder all follow a naming convention defined in the schema. A file named correctly in the wrong folder is as broken as a file named incorrectly anywhere.</p>
+          <p>Long asset names cause decompression failures in the NexRender pipeline. This limit is not documented anywhere; it was found in testing. All source assets in the templates use short, unambiguous names. The depth map files, the precomposition source footage, and the label placeholder all follow a naming convention defined in the schema. A file named correctly in the wrong folder is as broken as a file named incorrectly anywhere.</p>
         </div>
       </div>
 
@@ -696,7 +696,7 @@ a:hover { text-decoration: underline; }
     </div>
 
     <div class="gif-wrap" style="margin: 20px 0;">
-      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/Schema.png" alt="Milk Dynamic Video Schema documentation — variable naming conventions" loading="lazy">
+      <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/Schema.png" alt="Milk Dynamic Video Schema documentation: variable naming conventions" loading="lazy">
       <div class="gif-caption">Milk Dynamic Video Schema v2: variable definitions and naming conventions</div>
     </div>
 
@@ -711,7 +711,7 @@ a:hover { text-decoration: underline; }
     <div class="sec-label"><span class="sec-num">05</span>The web tool</div>
     <h2>Three steps. One finished video.</h2>
 
-    <p>The front end, built in Next.js against a Django API, presents the system as a three-step workflow: browse a gallery of recipe templates, review the asset details, then customise and submit. The complexity of the rendering pipeline is entirely invisible to the user.</p>
+    <p>The front end, built in Next.js against a Django API, presents the system as a three-step workflow: browse a gallery of recipe templates, review the asset details, then customize and submit. The complexity of the rendering pipeline is entirely invisible to the user.</p>
 
     <div class="workflow">
 
@@ -726,10 +726,10 @@ a:hover { text-decoration: underline; }
             <span class="tool-pill purple">Next.js</span>
             <span class="tool-pill purple">AWS S3</span>
           </div>
-          <p>The landing page renders a responsive grid of template cards. Each card shows the recipe thumbnail, run time, file size, and asset type. The thumbnail images are served from S3 with preloads for the first visible rows. A pencil icon badge on each card indicates the asset is customisable. Skeleton loading states are handled with <em>react-loading-skeleton</em> while the template list hydrates from the API.</p>
+          <p>The landing page renders a responsive grid of template cards. Each card shows the recipe thumbnail, run time, file size, and asset type. The thumbnail images are served from S3 with preloads for the first visible rows. A pencil icon badge on each card indicates the asset is customizable. Skeleton loading states are handled with <em>react-loading-skeleton</em> while the template list hydrates from the API.</p>
 
           <div class="gif-wrap" style="margin: 20px 0;">
-            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/customAssets.jpg" alt="MilkPEP Custom Asset Generator — template gallery grid" loading="lazy">
+            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/customAssets.jpg" alt="MilkPEP Custom Asset Generator: template gallery grid" loading="lazy">
             <div class="gif-caption">customizer.milkpep.org: template gallery</div>
           </div>
         </div>
@@ -741,15 +741,15 @@ a:hover { text-decoration: underline; }
           <div class="wf-line"></div>
         </div>
         <div class="wf-body">
-          <div class="wf-title">Asset detail: review before customising</div>
+          <div class="wf-title">Asset detail: review before customizing</div>
           <div class="tools">
             <span class="tool-pill purple">Next.js</span>
             <span class="tool-pill purple">Django API</span>
           </div>
-          <p>Selecting a template navigates to the asset detail page, which shows a larger preview of the recipe footage alongside the full specification: duration, output file size, available vessel types, and supported milk varieties for that recipe. The processor can verify the asset fits their use case before committing to the customisation step.</p>
+          <p>Selecting a template navigates to the asset detail page, which shows a larger preview of the recipe footage alongside the full specification: duration, output file size, available vessel types, and supported milk varieties for that recipe. The processor can verify the asset fits their use case before committing to the customization step.</p>
 
           <div class="gif-wrap" style="margin: 20px 0;">
-            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/recipe.jpg" alt="Asset detail page — recipe overview with run time, file size, and available options" loading="lazy">
+            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/recipe.jpg" alt="Asset detail page: recipe overview with run time, file size, and available options" loading="lazy">
             <div class="gif-caption">Asset detail: recipe specification view</div>
           </div>
         </div>
@@ -761,18 +761,18 @@ a:hover { text-decoration: underline; }
           <div class="wf-line"></div>
         </div>
         <div class="wf-body">
-          <div class="wf-title">Customise: set variables, upload label, submit</div>
+          <div class="wf-title">Customize: set variables, upload label, submit</div>
           <div class="tools">
             <span class="tool-pill purple">Next.js</span>
             <span class="tool-pill purple">Django API</span>
             <span class="tool-pill green">NexRender</span>
           </div>
-          <p>The customisation form presents only the variables relevant to the selected recipe: vessel type options that exist in the template, milk varieties the template supports, cap colours valid for the chosen vessel. Selecting a combination updates a live preview. The label upload field accepts the processor&rsquo;s brand artwork; the system handles the compositing.</p>
+          <p>The customization form presents only the variables relevant to the selected recipe: vessel type options that exist in the template, milk varieties the template supports, cap colors valid for the chosen vessel. Selecting a combination updates a live preview. The label upload field accepts the processor&rsquo;s brand artwork; the system handles the compositing.</p>
           <p>On submission, the form values are validated against the schema, a NexRender job manifest is constructed, and the render job is queued. The processor receives a download link when the render is complete.</p>
 
           <div class="gif-wrap" style="margin: 20px 0;">
-            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/carton.jpg" alt="Customisation form — selecting carton type, milk variety, cap colour and uploading brand label" loading="lazy">
-            <div class="gif-caption">Customise step: variable selection and label upload</div>
+            <img src="https://raw.githubusercontent.com/StudioDavidPreli/milkProcessors/main/carton.jpg" alt="Customization form: selecting carton type, milk variety, cap color and uploading brand label" loading="lazy">
+            <div class="gif-caption">Customize step: variable selection and label upload</div>
           </div>
         </div>
       </div>
@@ -786,14 +786,14 @@ a:hover { text-decoration: underline; }
     <div class="sec-label"><span class="sec-num">06</span>Scale</div>
     <h2>The complexity lives in the template, not in the render.</h2>
 
-    <p>12,460 is not a count of videos produced. It is the number of valid output combinations the system supports across all recipes, vessel types, vessel sizes, milk varieties, and cap colours. Each combination represents a distinct After Effects render: a unique precomp configuration, label placement, and expression state.</p>
+    <p>12,460 is the number of valid output combinations the system supports across all recipes, vessel types, vessel sizes, milk varieties, and cap colors, not a count of videos produced. Each combination represents a distinct After Effects render: a unique precomp configuration, label placement, and expression state.</p>
 
     <div class="total-callout">
       <div class="total-callout-num">12,460</div>
-      <div class="total-callout-desc">possible unique video outputs: each a distinct combination of recipe, vessel type, vessel size, milk variety, and cap colour</div>
+      <div class="total-callout-desc">possible unique video outputs: each a distinct combination of recipe, vessel type, vessel size, milk variety, and cap color</div>
     </div>
 
-    <p>That number is the product of decisions made during the template build. Every cap colour that needed to work required a corresponding precomp layer and an expression branch. Every vessel size that differed from the default required a size-specific composition with its own label transform. Every milk variety required a footage variant with its own depth-composited label zone. None of this complexity exists at the render-time level: NexRender writes a keyword to a text layer and starts the queue. The complexity was resolved entirely in the template architecture.</p>
+    <p>That number is the product of decisions made during the template build. Every cap color that needed to work required a corresponding precomp layer and an expression branch. Every vessel size that differed from the default required a size-specific composition with its own label transform. Every milk variety required a footage variant with its own depth-composited label zone. None of this complexity exists at the render-time level: NexRender writes a keyword to a text layer and starts the queue. The complexity was resolved entirely in the template architecture.</p>
 
     <div class="combo-grid">
       <div class="combo-cell">
@@ -812,7 +812,7 @@ a:hover { text-decoration: underline; }
         <div class="combo-cell-desc">Whole, 2%, skim, chocolate: per-recipe availability</div>
       </div>
       <div class="combo-cell">
-        <div class="combo-cell-label">Cap colours</div>
+        <div class="combo-cell-label">Cap colors</div>
         <div class="combo-cell-count">10+</div>
         <div class="combo-cell-desc">Per-vessel cap options; each a visible precomp layer</div>
       </div>
@@ -865,7 +865,7 @@ a:hover { text-decoration: underline; }
 
     </div>
 
-    <p>A processor with no creative department, no production budget, and no knowledge of After Effects submits a form and receives a file indistinguishable from a custom production. That was the brief. That is what the tool does.</p>
+    <p>A processor with no creative department, no production budget, and no knowledge of After Effects submits a form and receives a file indistinguishable from a custom production. That was the brief. That is what the tool delivers.</p>
 
   </section>
 
@@ -892,7 +892,7 @@ function reportHeight() {
 reportHeight();
 window.addEventListener('load', reportHeight);
 
-// Fire on every image load — GIFs and lazy images expand the doc after initial paint
+// Fire on every image load: GIFs and lazy images expand the doc after initial paint
 document.querySelectorAll('img').forEach(function(img) {
   if (img.complete) {
     reportHeight();
